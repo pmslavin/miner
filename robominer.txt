@@ -1,0 +1,15 @@
+Descends from fixed point on surface: mine entrance
+
+Pulse - small radius seismic survey reveals minerals in local area.  Stored in local map.
+
+Minerals are prioritised by value.
+
+Unit can Move left, right, up, down and Drill left, right, up down.
+
+Unit can Gather mineral it occupies the same coord as.
+
+Unit has finite mineral storage capacity.  Must return to surface to unload.
+
+Unit has finite energy capacity. Pulse, Drill, Move, and Gather all have energy cost.  Must return to surface to recharge.
+
+In absence of minerals in local map, unit will explore, prioritising existing channels.
