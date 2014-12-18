@@ -1,4 +1,5 @@
 #include "Copper.h"
+#include "Ground.h"
 #include <iostream>
 
 const std::string Copper::name = "Copper";
@@ -12,7 +13,7 @@ Copper::Copper(int yield) : Mineral(yield)
 
 Copper::~Copper()
 {
-	std::cout << "Destructing " << name << " then... ";
+//	std::cout << "Destructing " << name << " then... ";
 }
 
 
@@ -30,31 +31,23 @@ const std::string Copper::getSymbol() const
 
 void Copper::draw(Uint32 *pixels)
 {
-//        int w = parent->getWidth();
-//	int h = parent->getHeight();
-	int w = 1024;
-	int h = 896;
-        int x = parent->getX();
-        int y = parent->getY();
+	int cell_w = parent->getWidth();
+	int cell_h = parent->getHeight();
+	int w = parent->getGround()->getWidth();
+	int h = parent->getGround()->getHeight();
 
 //        pixels[y*w+x] = 0x00E89149;
-        pixels[0] += 0x0000FFFF*yield/512.00;
-        pixels[1] += 0x0000FFFF*yield/512.00;
-        pixels[2] += 0x0000FFFF*yield/512.00;
-        pixels[3] += 0x0000FFFF*yield/512.00;
+//        pixels[0] += 0x00E89149*yield/768.0;
+//	Copper ore 0x0EAD88;
 
-        pixels[0+1*w] += 0x0000FFFF*yield/512.00;
-        pixels[1+1*w] += 0x0000FFFF*yield/512.00;
-        pixels[2+1*w] += 0x0000FFFF*yield/512.00;
-        pixels[3+1*w] += 0x0000FFFF*yield/512.00;
+	int most = 0x0E * yield/128.0;
+	int mid = 0xAD * yield/128.0;
+	int least = 0x88 * yield/128.0;
 
-        pixels[0+2*w] += 0x0000FFFF*yield/512.00;
-        pixels[1+2*w] += 0x0000FFFF*yield/512.00;
-        pixels[2+2*w] += 0x0000FFFF*yield/512.00;
-        pixels[3+2*w] += 0x0000FFFF*yield/512.00;
+	for(int r=0; r<cell_h; ++r){
+		for(int c=0; c<cell_w; ++c){
+			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
+		}
+	}
 
-        pixels[0+3*w] += 0x0000FFFF*yield/512.00;
-        pixels[1+3*w] += 0x0000FFFF*yield/512.00;
-        pixels[2+3*w] += 0x0000FFFF*yield/512.00;
-        pixels[3+3*w] += 0x0000FFFF*yield/512.00;
 }

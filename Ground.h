@@ -15,6 +15,8 @@ public:
 	Cell& getCell(int x, int y);
 	int getRows() const;
 	int getCols() const;
+	int getWidth() const;
+	int getHeight() const;
 	void calcMinerals();
 	void clearCells();
 	void draw(Uint32 *pixels);

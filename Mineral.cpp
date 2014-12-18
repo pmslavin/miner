@@ -31,7 +31,7 @@ int Mineral::getYield() const
 
 Mineral::~Mineral()
 {
-	std::cout << "Destructing " << name << std::endl;
+//	std::cout << "Destructing " << name << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& ostr, Mineral& m)

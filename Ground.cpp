@@ -1,6 +1,8 @@
 #include "Ground.h"
 #include "Iron.h"
 #include "Copper.h"
+#include "Gold.h"
+#include "Diamond.h"
 
 
 Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
@@ -32,11 +34,17 @@ Cell& Ground::getCell(int y, int x)
 void Ground::calcMinerals()
 {
 	for(auto& c: cells){
-		if(rand() % 16 == 0)
+		if(rand() % 36 == 0)
 			c.addMineral(new Iron(rand() % 180));
 
-		if(rand() % 24 == 7)
-			c.addMineral(new Copper(rand() % 120));
+		if(rand() % 64 == 7)
+			c.addMineral(new Copper(rand() % 128));
+
+		if(rand() % 128 == 77)
+			c.addMineral(new Gold(rand() % 96));
+
+		if(rand() % 512 == 77)
+			c.addMineral(new Diamond(rand() % 256));
 	}
 }
 
@@ -50,6 +58,18 @@ int Ground::getRows() const
 int Ground::getCols() const
 {
 	return cell_cols;
+}
+
+
+int Ground::getWidth() const
+{
+	return width;
+}
+
+
+int Ground::getHeight() const
+{
+	return height;
 }
 
 

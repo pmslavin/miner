@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h);
 
 	Uint32 *pixels = new Uint32[w*h];
+	memset(pixels, 0x00, w*h*sizeof(Uint32));
 
 //	Iron fe(17), feRich(155);
 	Iron *fe = new Iron(17);
@@ -50,12 +51,12 @@ int main(int argc, char *argv[])
 
 	g.calcMinerals();
 
-	for(int i=0; i<g.getRows(); ++i){
+/*	for(int i=0; i<g.getRows(); ++i){
 		for(int j=0; j<g.getCols(); ++j){
 			std::cout << g.getCell(i, j);
 		}
 	}
-
+*/
 	g.draw(pixels);
 
 	while(active){
