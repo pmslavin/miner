@@ -2,8 +2,9 @@
 #define _MINERAL_H_
 
 #include <string>
+#include <SDL2/SDL.h>
 
-class Cell;
+#include "Cell.h"
 
 class Mineral
 {
@@ -16,7 +17,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& ostr, Mineral& m);
 	void setParent(Cell *parent);
 	Cell *getParent() const;
-	virtual void draw() = 0;
+	virtual void draw(Uint32 *pixels) = 0;
 protected:
 	static const std::string name;
 	static const std::string symbol;

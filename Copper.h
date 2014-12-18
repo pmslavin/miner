@@ -10,7 +10,7 @@ public:
 	~Copper();
 	const std::string getName() const;
 	const std::string getSymbol() const;
-	void draw();
+	void draw(Uint32 *pixels);
 protected:
 	static const std::string name;
 	static const std::string symbol;

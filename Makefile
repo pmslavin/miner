@@ -2,12 +2,15 @@ CXX	:= g++
 CXXFLAGS:= -std=c++11
 WARN	:= -Wall
 OBJECTS	:= Cell.o Mineral.o Iron.o Copper.o Ground.o
-LIBS	:=
+LIBS	:= -lSDL2
 
 all: main
 
-main: ${OBJECTS}
+main: ${OBJECTS} main.cpp
 	${CXX} ${CXXFLAGS} ${WARN} main.cpp ${OBJECTS} -o main ${LIBS}
+
+minerals: minerals.cpp
+	${CXX} ${CXXFLAGS} ${WARN} minerals.cpp -o minerals -lSDL2
 
 Cell.o: Cell.cpp Cell.h
 	${CXX} ${CXXFLAGS} -c Cell.cpp

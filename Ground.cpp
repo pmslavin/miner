@@ -1,14 +1,15 @@
 #include "Ground.h"
+#include "Iron.h"
+#include "Copper.h"
+
 
 Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
 {
-	cell_rows = width/8;
-	cell_cols = height/8;
-
-//	cells.resize(cell_rows * cell_cols);
+	cell_rows = height/4;
+	cell_cols = width/4;
 
 	for(int i=0; i<cell_rows*cell_cols; ++i){
-		cells.push_back(Cell(8, 8, i%cell_cols, i/cell_cols, frame));
+		cells.push_back(Cell(4, 4, i%cell_cols, i/cell_cols, this));
 	}
 }
 
@@ -19,10 +20,10 @@ Ground::~Ground()
 }
 
 
-Cell& Ground::getCell(int x, int y)
+Cell& Ground::getCell(int y, int x)
 {
 	if((x < 0 || x >= cell_cols) || (y < 0 || y >= cell_rows)){
-		//Error...
+		throw std::exception();
 	}
 	return cells[y*cell_cols + x]; 
 }
@@ -30,9 +31,13 @@ Cell& Ground::getCell(int x, int y)
 
 void Ground::calcMinerals()
 {
-//	for(auto& c: cells){
-//		
-//	}
+	for(auto& c: cells){
+		if(rand() % 16 == 0)
+			c.addMineral(new Iron(rand() % 180));
+
+		if(rand() % 24 == 7)
+			c.addMineral(new Copper(rand() % 120));
+	}
 }
 
 
@@ -45,4 +50,19 @@ int Ground::getRows() const
 int Ground::getCols() const
 {
 	return cell_cols;
+}
+
+
+void Ground::clearCells()
+{
+	for(auto& c: cells)
+		c.clearMinerals();	
+}
+
+
+
+void Ground::draw(Uint32 *pixels)
+{
+	for(auto& c: cells)
+		c.drawMinerals(&pixels[width*c.getY()*c.getHeight()+c.getX()*c.getWidth()]);
 }

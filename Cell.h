@@ -4,30 +4,33 @@
 #include <vector>
 #include <string>
 
-class Frame;
+#include "SDL2/SDL.h"
+
+class Ground;
 class Mineral;
 
 class Cell
 {
 public:
-	Cell(int w=1, int h=1, int x=0, int y=0, Frame *fr=nullptr);
+	Cell(int w=1, int h=1, int x=0, int y=0, Ground *g=nullptr);
 	~Cell();
 	int getWidth() const;
 	int getHeight() const;
 	int getX() const;
 	int getY() const;
-	Frame *getFrame() const;
-	void setFrame(Frame *fr);
+	Ground *getGround() const;
+	void setGround(Ground *g);
 	void addMineral(Mineral *m);
 	void clearMinerals();
 	int mineralCount() const;
+	void drawMinerals(Uint32 *pixels);
 	friend std::ostream& operator<<(std::ostream& ostr, Cell& c);
 protected:
 	int width;
 	int height;
 	int x;
 	int y;
-	Frame *frame;
+	Ground *ground;
 	std::vector<Mineral *> minerals;
 };
 

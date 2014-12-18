@@ -16,6 +16,8 @@ public:
 	int getRows() const;
 	int getCols() const;
 	void calcMinerals();
+	void clearCells();
+	void draw(Uint32 *pixels);
 protected:
 	int width;
 	int height;

@@ -3,18 +3,18 @@
 #include <iostream>
 
 
-Cell::Cell(int w, int h, int x, int y, Frame *fr) : width(w),
+Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
 						    height(h),
 						    x(x),
 						    y(y),
-						    frame(fr)
+						    ground(g)
 {
 
 }
 
 Cell::~Cell()
 {
-	frame = nullptr;
+	ground = nullptr;
 }
 
 
@@ -41,15 +41,16 @@ int Cell::getY() const
 	return y;
 }
 
-void Cell::setFrame(Frame *fr)
+
+void Cell::setGround(Ground *g)
 {
-	frame = fr;
+	ground = g;
 }
 
 
-Frame *Cell::getFrame() const
+Ground *Cell::getGround() const
 {
-	return frame;
+	return ground;
 }
 
 
@@ -65,8 +66,10 @@ void Cell::clearMinerals()
 //	for(auto iter=minerals.begin(); iter != minerals.end(); ++iter){
 //		(*iter)->setParent(nullptr);
 //	}
-	for(auto& m: minerals)
+	for(auto& m: minerals){
 		m->setParent(nullptr);
+		delete m;
+	}
 
 	minerals.clear();
 }
@@ -79,7 +82,7 @@ int Cell::mineralCount() const
 
 std::ostream& operator<<(std::ostream& ostr, Cell& c)
 {
-	ostr << "Cell at (" << c.x << "," <<c.y << "):" << std::endl;
+	ostr << "Cell at (" << c.y << "," << c.x << "):" << std::endl;
 
 	unsigned int idx;
 
@@ -87,4 +90,12 @@ std::ostream& operator<<(std::ostream& ostr, Cell& c)
 		ostr << "[" << idx+1 << "] " << *c.minerals[idx];
 
 	return ostr;
+}
+
+
+void Cell::drawMinerals(Uint32 *pixels)
+{
+	for(auto& m: minerals){
+		m->draw(pixels);
+	}
 }
