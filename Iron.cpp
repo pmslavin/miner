@@ -26,3 +26,9 @@ const std::string Iron::getSymbol() const
 {
 	return symbol;
 }
+
+
+void Iron::draw()
+{
+
+}

@@ -55,12 +55,19 @@ Frame *Cell::getFrame() const
 
 void Cell::addMineral(Mineral *m)
 {
+	m->setParent(this);
 	minerals.push_back(m);
 }
 
 
 void Cell::clearMinerals()
 {
+//	for(auto iter=minerals.begin(); iter != minerals.end(); ++iter){
+//		(*iter)->setParent(nullptr);
+//	}
+	for(auto& m: minerals)
+		m->setParent(nullptr);
+
 	minerals.clear();
 }
 

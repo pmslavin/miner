@@ -1,0 +1,11 @@
+Frame contains Surface and Ground.
+
+Surface has sky, decorations, building, and mine entrance.
+
+Ground comprised of Cells.
+
+Each Cell contains Minerals, with varying Yields.
+
+Ground has MineralProfile, describing the yield of each Mineral according to depth. MineralProfile also includes Bands and Seams.
+
+Each Mineral draws itself on the pixel coordinates supplied by its parent Cell.

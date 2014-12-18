@@ -8,18 +8,19 @@ class Cell;
 class Mineral
 {
 public:
-	Mineral(int yield=0);
+	Mineral(int yield=0, Cell* parent=nullptr);
 	virtual ~Mineral();
 	virtual const std::string getName() const;
 	virtual const std::string getSymbol() const;
 	virtual int getYield() const;
 	friend std::ostream& operator<<(std::ostream& ostr, Mineral& m);
-//	virtual int getWeight() const;
-//	virtual int getValue() const;
-//	virtual void draw()=0;
+	void setParent(Cell *parent);
+	Cell *getParent() const;
+	virtual void draw() = 0;
 protected:
 	static const std::string name;
 	static const std::string symbol;
+	Cell *parent;
 	int yield;
 };
 

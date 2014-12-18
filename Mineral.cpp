@@ -5,7 +5,7 @@
 const std::string Mineral::name = "Mineral";
 const std::string Mineral::symbol = "XX";
 
-Mineral::Mineral(int yield) : yield(yield)
+Mineral::Mineral(int yield, Cell *par) : yield(yield), parent(par)
 {
 
 }
@@ -37,26 +37,20 @@ Mineral::~Mineral()
 std::ostream& operator<<(std::ostream& ostr, Mineral& m)
 {
 	ostr << m.getName() << " (" << m.getSymbol() << ") "
-	     << "Yield: " << m.getYield() << std::endl;
+	     << "Yield: " << m.getYield() << "  Parent: "
+	     << m.getParent() << std::endl;
 
 	return ostr;
 }
 
-/*
-Mineral::Mineral(int weight, int val) : weight(weight),
-       					value(val)
-{
-	
-}
 
-int Mineral::getWeight() const
+void Mineral::setParent(Cell *par)
 {
-	return weight;
+	parent = par;
 }
 
 
-int Mineral::getValue() const
+Cell *Mineral::getParent() const
 {
-	return value;
+	return parent;
 }
-*/

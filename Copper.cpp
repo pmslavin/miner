@@ -26,3 +26,9 @@ const std::string Copper::getSymbol() const
 {
 	return symbol;
 }
+
+
+void Copper::draw()
+{
+
+}
