@@ -13,12 +13,16 @@ Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
 	for(int i=0; i<cell_rows*cell_cols; ++i){
 		cells.push_back(Cell(4, 4, i%cell_cols, i/cell_cols, this));
 	}
+
+	pixels = new Uint32[w*h];
+
+	calcMinerals();
 }
 
 
 Ground::~Ground()
 {
-
+	delete [] pixels;
 }
 
 
@@ -80,9 +84,17 @@ void Ground::clearCells()
 }
 
 
-
-void Ground::draw(Uint32 *pixels)
+void Ground::draw()
 {
+	
+	memset(pixels, 0, width*height*sizeof(Uint32));
+
 	for(auto& c: cells)
 		c.drawMinerals(&pixels[width*c.getY()*c.getHeight()+c.getX()*c.getWidth()]);
+}
+
+
+const Uint32 *Ground::getPixels() const
+{
+	return pixels;
 }

@@ -19,7 +19,8 @@ public:
 	int getHeight() const;
 	void calcMinerals();
 	void clearCells();
-	void draw(Uint32 *pixels);
+	void draw();
+	const Uint32 *getPixels() const;
 protected:
 	int width;
 	int height;
@@ -27,6 +28,7 @@ protected:
 	std::vector<Cell> cells;
 	int cell_cols;
 	int cell_rows;
+	Uint32 *pixels;
 };
 
 #endif

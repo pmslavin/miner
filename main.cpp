@@ -1,8 +1,7 @@
 #include "Iron.h"
 #include "Copper.h"
 #include "Cell.h"
-#include "Ground.h"
-#include "Surface.h"
+#include "Frame.h"
 #include <SDL2/SDL.h>
 
 #include <iostream>
@@ -12,8 +11,9 @@ int main(int argc, char *argv[])
 {
 
 	bool active = true;
-	Ground g(w, h);
-	Surface s(w, 56);
+//	Ground g(w, h);
+//	Surface s(w, 56);
+	Frame frame(w, h);
 	SDL_Event event;
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
 	SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h+56);
 
-	Uint32 *pixels = new Uint32[w*h];
-	memset(pixels, 0x00, w*h*sizeof(Uint32));
+//	Uint32 *pixels = new Uint32[w*h];
+//	memset(pixels, 0x00, w*h*sizeof(Uint32));
 
 //	Iron fe(17), feRich(155);
-	Iron *fe = new Iron(17);
+/*	Iron *fe = new Iron(17);
 	Iron *feRich = new Iron(155);
 	Copper *cu = new Copper(33);
 	Cell c;
@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 	
 	std::cout << "Ground: " << g.getRows() << "x"
 		  << g.getCols() << std::endl;
-
-//	std::cout << fe;
+*/
+/*	std::cout << fe;
 	std::cout << *feRich;
 	std::cout << *cu;
 
@@ -47,11 +47,11 @@ int main(int argc, char *argv[])
 	std::cout << c;
 	c.clearMinerals();
 	std::cout << "mineralCount: " << c.mineralCount() << std::endl;
-
+*/
 //	std::cout << *fe;
 //	std::cout << *cu;
 
-	g.calcMinerals();
+//	g.calcMinerals();
 
 /*	for(int i=0; i<g.getRows(); ++i){
 		for(int j=0; j<g.getCols(); ++j){
@@ -59,15 +59,18 @@ int main(int argc, char *argv[])
 		}
 	}
 */
-	g.draw(pixels);
+/*	g.draw();
 	s.draw();
 
 	SDL_Rect lower = {0, 56, w, h};
 	SDL_Rect upper = {0, 0, w, 56};
+*/
+//	frame.getGround()->calcMinerals();
 
 	while(active){
-		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));
-		SDL_UpdateTexture(texture, &lower, pixels, w*sizeof(Uint32));
+//		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));
+//		SDL_UpdateTexture(texture, &lower, g.getPixels(), w*sizeof(Uint32));
+		frame.draw(texture);
 		SDL_WaitEvent(&event);
 
 		switch(event.type){
@@ -85,8 +88,8 @@ int main(int argc, char *argv[])
 		SDL_RenderPresent(renderer);
 	}
 
-	g.clearCells();
-	delete[] pixels;
+//	g.clearCells();
+//	delete[] pixels;
 	SDL_DestroyTexture(texture);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
