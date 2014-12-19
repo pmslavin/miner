@@ -1,5 +1,6 @@
 #include "Cell.h"
 #include "Mineral.h"
+#include "RoboMiner.h"
 #include <iostream>
 
 
@@ -7,7 +8,10 @@ Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
 						    height(h),
 						    x(x),
 						    y(y),
-						    ground(g)
+						    ground(g),
+						    miner(nullptr),
+						    visible(false),
+						    drilled(false)
 {
 
 }
@@ -98,4 +102,43 @@ void Cell::drawMinerals(Uint32 *pixels)
 	for(auto& m: minerals){
 		m->draw(pixels);
 	}
+
+	if(miner)
+		miner->draw(pixels);
+}
+
+
+void Cell::hasMiner(RoboMiner *rm)
+{
+	miner = rm;
+}
+
+
+void Cell::clearMiner()
+{
+	miner = nullptr;
+}
+
+
+void Cell::setVisible(bool isvis)
+{
+	visible = isvis;
+}
+
+
+bool Cell::isVisible() const
+{
+	return visible;
+}
+
+
+void Cell::setDrilled(bool isdrilled)
+{
+	drilled = isdrilled;
+}
+
+
+bool Cell::isDrilled() const
+{
+	return drilled;
 }

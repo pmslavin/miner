@@ -6,8 +6,11 @@
 
 #include "SDL2/SDL.h"
 
+//#include "RoboMiner.h"
+
 class Ground;
 class Mineral;
+class RoboMiner;
 
 class Cell
 {
@@ -25,6 +28,12 @@ public:
 	int mineralCount() const;
 	void drawMinerals(Uint32 *pixels);
 	friend std::ostream& operator<<(std::ostream& ostr, Cell& c);
+	void hasMiner(RoboMiner *rm);
+	void clearMiner();
+	void setVisible(bool isvis);
+	bool isVisible() const;
+	void setDrilled(bool isdrilled);
+	bool isDrilled() const;
 protected:
 	int width;
 	int height;
@@ -32,6 +41,9 @@ protected:
 	int y;
 	Ground *ground;
 	std::vector<Mineral *> minerals;
+	RoboMiner *miner;
+	bool visible;
+	bool drilled;
 };
 
 #endif

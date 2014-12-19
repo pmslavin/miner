@@ -5,6 +5,10 @@ Frame::Frame(int w, int h) : width(w), height(h)
 {
 	ground = new Ground(w, h);
 	surface = new Surface(w, 56);
+	miner = new RoboMiner(24, 24, this);
+
+	Cell& rmcell = ground->getCell(24, 24);
+	rmcell.hasMiner(miner);
 
 	lower = {0, 56, w, h};
 	upper = {0, 0, w, 56};
@@ -31,4 +35,15 @@ void Frame::draw(SDL_Texture *texture)
 Ground *Frame::getGround() const
 {
 	return ground;
+}
+
+
+Surface *Frame::getSurface() const
+{
+	return surface;
+}
+
+RoboMiner *Frame::getMiner() const
+{
+	return miner;
 }

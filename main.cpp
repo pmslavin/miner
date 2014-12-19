@@ -66,26 +66,33 @@ int main(int argc, char *argv[])
 	SDL_Rect upper = {0, 0, w, 56};
 */
 //	frame.getGround()->calcMinerals();
+	RoboMiner *rm = frame.getMiner();
 
 	while(active){
 //		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));
 //		SDL_UpdateTexture(texture, &lower, g.getPixels(), w*sizeof(Uint32));
 		frame.draw(texture);
-		SDL_WaitEvent(&event);
+//		SDL_WaitEvent(&event);
 
-		switch(event.type){
-			case SDL_QUIT:
-			active = false;
-			break;
-		case SDL_KEYDOWN:
-			if(event.key.keysym.sym == SDLK_q)
+		while(SDL_PollEvent(&event)){
+			switch(event.type){
+				case SDL_QUIT:
 				active = false;
-			break;
+				break;
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym == SDLK_q)
+					active = false;
+				break;
+			}
 		}
 
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
+
+		SDL_Delay(50);
+		rm->action();
+//		rm->move(25, 25);
 	}
 
 //	g.clearCells();
