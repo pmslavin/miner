@@ -37,13 +37,13 @@ void Ground::calcMinerals()
 		if(rand() % 36 == 0)
 			c.addMineral(new Iron(rand() % 180));
 
-		if(rand() % 64 == 7)
+		if(rand() % 64 == 7 && c.getY() > cell_rows/4)
 			c.addMineral(new Copper(rand() % 128));
 
-		if(rand() % 128 == 77)
+		if(rand() % 128 == 77 && c.getY() > cell_rows/1.7)
 			c.addMineral(new Gold(rand() % 96));
 
-		if(rand() % 512 == 77)
+		if(rand() % 512 == 77 && c.getY() > cell_rows/1.3)
 			c.addMineral(new Diamond(rand() % 256));
 	}
 }

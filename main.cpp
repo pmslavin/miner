@@ -2,6 +2,7 @@
 #include "Copper.h"
 #include "Cell.h"
 #include "Ground.h"
+#include "Surface.h"
 #include <SDL2/SDL.h>
 
 #include <iostream>
@@ -12,12 +13,13 @@ int main(int argc, char *argv[])
 
 	bool active = true;
 	Ground g(w, h);
+	Surface s(w, 56);
 	SDL_Event event;
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_Window *window = SDL_CreateWindow("Miner", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, 0);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h);
+	SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h+56);
 
 	Uint32 *pixels = new Uint32[w*h];
 	memset(pixels, 0x00, w*h*sizeof(Uint32));
@@ -58,9 +60,14 @@ int main(int argc, char *argv[])
 	}
 */
 	g.draw(pixels);
+	s.draw();
+
+	SDL_Rect lower = {0, 56, w, h};
+	SDL_Rect upper = {0, 0, w, 56};
 
 	while(active){
-		SDL_UpdateTexture(texture, NULL, pixels, w*sizeof(Uint32));
+		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));
+		SDL_UpdateTexture(texture, &lower, pixels, w*sizeof(Uint32));
 		SDL_WaitEvent(&event);
 
 		switch(event.type){

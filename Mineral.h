@@ -2,7 +2,8 @@
 #define _MINERAL_H_
 
 #include <string>
-#include <SDL2/SDL.h>
+
+typedef uint32_t Uint32;
 
 #include "Cell.h"
 
