@@ -31,10 +31,9 @@ const std::string Diamond::getSymbol() const
 
 void Diamond::draw(Uint32 *pixels)
 {
-	int cell_w = parent->getWidth();
-	int cell_h = parent->getHeight();
+//	int cell_w = parent->getWidth();
+//	int cell_h = parent->getHeight();
 	int w = parent->getGround()->getWidth();
-	int h = parent->getGround()->getHeight();
 
 //	Diamond 0xE0E0E0;
 //	0010
@@ -65,4 +64,14 @@ void Diamond::draw(Uint32 *pixels)
 
 	pixels[1+3*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 
+}
+
+
+Diamond *Diamond::extract(int quant)
+{
+	if(quant > yield)
+		quant = yield;
+
+	yield -= quant;
+	return new Diamond(quant);
 }

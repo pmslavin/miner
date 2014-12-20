@@ -54,3 +54,4 @@ Cell *Mineral::getParent() const
 {
 	return parent;
 }
+

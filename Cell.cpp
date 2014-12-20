@@ -1,5 +1,6 @@
 #include "Cell.h"
 #include "Mineral.h"
+#include "Ground.h"
 #include "RoboMiner.h"
 #include <iostream>
 
@@ -99,12 +100,32 @@ std::ostream& operator<<(std::ostream& ostr, Cell& c)
 
 void Cell::drawMinerals(Uint32 *pixels)
 {
+
+	if(isDrilled() && minerals.empty())
+		drawDrilled(pixels);
+
 	for(auto& m: minerals){
 		m->draw(pixels);
 	}
 
 	if(miner)
 		miner->draw(pixels);
+}
+
+
+void Cell::drawDrilled(Uint32 *pixels)
+{
+	int w = ground->getWidth();
+	int cell_w = getWidth();
+	int cell_h = getHeight();
+
+	for(int r=0; r<cell_h; ++r){
+		for(int c=0; c<cell_w; ++c){
+			pixels[r*w+c] = 0x008C918E;
+//			pixels[r*w+c] = 0x009DA39F;
+//			pixels[r*w+c] = 0x00C9C1C6;
+		}
+	}
 }
 
 
@@ -141,4 +162,16 @@ void Cell::setDrilled(bool isdrilled)
 bool Cell::isDrilled() const
 {
 	return drilled;
+}
+
+
+std::vector<Mineral *> *Cell::extract(int quant)
+{
+	std::vector<Mineral *> *ores = new std::vector<Mineral *>;
+
+	for(auto& m: minerals){
+		ores->push_back(m->extract(quant));
+	}
+
+	return ores;
 }

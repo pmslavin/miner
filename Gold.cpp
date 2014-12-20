@@ -34,7 +34,6 @@ void Gold::draw(Uint32 *pixels)
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
 	int w = parent->getGround()->getWidth();
-	int h = parent->getGround()->getHeight();
 
 //	pixels[0] += (0x00 << 24) + (yield << 16);
 //	Gold ore 0xF0D000
@@ -48,4 +47,14 @@ void Gold::draw(Uint32 *pixels)
 			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 		}
 	}
+}
+
+
+Gold *Gold::extract(int quant)
+{
+	if(quant > yield)
+		quant = yield;
+
+	yield -= quant;
+	return new Gold(quant);
 }

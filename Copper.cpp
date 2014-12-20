@@ -34,7 +34,6 @@ void Copper::draw(Uint32 *pixels)
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
 	int w = parent->getGround()->getWidth();
-	int h = parent->getGround()->getHeight();
 
 //        pixels[y*w+x] = 0x00E89149;
 //        pixels[0] += 0x00E89149*yield/768.0;
@@ -50,4 +49,14 @@ void Copper::draw(Uint32 *pixels)
 		}
 	}
 
+}
+
+
+Copper *Copper::extract(int quant)
+{
+	if(quant > yield)
+		quant = yield;
+
+	yield -= quant;
+	return new Copper(quant);
 }

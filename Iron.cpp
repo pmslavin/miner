@@ -34,7 +34,6 @@ void Iron::draw(Uint32 *pixels)
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
 	int w = parent->getGround()->getWidth();
-	int h = parent->getGround()->getHeight();
 
 //	pixels[0] += (0x00 << 24) + (yield << 16);
 //	Iron ore 0xED7B4A
@@ -70,4 +69,14 @@ void Iron::draw(Uint32 *pixels)
 	pixels[2+3*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 	pixels[3+3*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 */
+}
+
+
+Iron *Iron::extract(int quant)
+{
+	if(quant > yield)
+		quant = yield;
+
+	yield -= quant;
+	return new Iron(quant);
 }

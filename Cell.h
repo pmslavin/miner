@@ -6,8 +6,6 @@
 
 #include "SDL2/SDL.h"
 
-//#include "RoboMiner.h"
-
 class Ground;
 class Mineral;
 class RoboMiner;
@@ -34,6 +32,8 @@ public:
 	bool isVisible() const;
 	void setDrilled(bool isdrilled);
 	bool isDrilled() const;
+	void drawDrilled(Uint32 *pixels);
+	std::vector<Mineral *> *extract(int quant);
 protected:
 	int width;
 	int height;

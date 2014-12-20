@@ -17,8 +17,6 @@ Surface::~Surface()
 
 void Surface::draw()
 {
-//	memset(pixels, 0xC0, width*height*sizeof(Uint32));
-
 	int i, j;
 	const int grass_height = 14;
 	const int soil_height = 4;

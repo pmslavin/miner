@@ -19,11 +19,12 @@ public:
 	void setParent(Cell *parent);
 	Cell *getParent() const;
 	virtual void draw(Uint32 *pixels) = 0;
+	virtual Mineral *extract(int quant) = 0;
 protected:
 	static const std::string name;
 	static const std::string symbol;
-	Cell *parent;
 	int yield;
+	Cell *parent;
 };
 
 #endif

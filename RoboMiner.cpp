@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Frame.h"
 #include "RoboMiner.h"
+#include "Mineral.h"
 
 
 
@@ -18,12 +19,6 @@ RoboMiner::RoboMiner(int cx, int cy, Frame *fr) : cell_x(cx),
 RoboMiner::~RoboMiner()
 {
 //	delete pixels;
-}
-
-
-const uint32_t *RoboMiner::getPixels() const
-{
-//	return pixels;
 }
 
 
@@ -80,8 +75,10 @@ void RoboMiner::setCell(Cell *c)
 
 void RoboMiner::move(int cx, int cy)
 {
-	int maxCell_x = frame->getGround()->getCols();
-	int maxCell_y = frame->getGround()->getRows();
+
+	Ground *gr = frame->getGround();
+	int maxCell_x = gr->getCols();
+	int maxCell_y = gr->getRows();
 
 	if(cx<0 || cx>maxCell_x)
 		return;
@@ -89,11 +86,13 @@ void RoboMiner::move(int cx, int cy)
 	if(cy<0 || cy>maxCell_y)
 		return;
 
-	std::cout << "Moving from (" << cell_x << "," << cell_y << ")"
-		  << "to (" << cx << "," << cy << ")" << std::endl;
-
-	Cell *destcell = &(frame->getGround()->getCell(cx, cy));
+/*	std::cout << "Moving from (" << cell_x << "," << cell_y << ")"
+		  << " to (" << cx << "," << cy << ")" << std::endl;
+*/
+	Cell *destcell = &(gr->getCell(cx, cy));
 	cell->clearMiner();
+	if(!destcell->isDrilled())
+		drill(cx, cy);
 	cell = destcell;
 	cell->hasMiner(this);
 	cell_x = cx;
@@ -103,6 +102,9 @@ void RoboMiner::move(int cx, int cy)
 
 int RoboMiner::drill(int cx, int cy)
 {
+	Cell &c = frame->getGround()->getCell(cx, cy);
+	c.setDrilled(true);
+
 	return 0;
 }
 
@@ -127,4 +129,26 @@ void RoboMiner::action()
 		  << std::endl;
 */
 	move(cell_x + offset_x, cell_y + offset_y);
+
+	if(cell->mineralCount())
+		mine();
+}
+
+
+void RoboMiner::mine()
+{
+	if(!cell->mineralCount())
+		return;
+
+	std::vector<Mineral *> *output = cell->extract(5);
+
+	std::cout << "Mining (" << cell_x << "," << cell_y
+		  << ") yields:" << std::endl;
+
+	int idx = 1;
+	for(auto& m: *output){
+		std::cout << '\t' << "[" << idx++ << "] "
+			  << m->getYield() << " units of "
+			  << m->getName() << std::endl;
+	}
 }
