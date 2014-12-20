@@ -5,13 +5,13 @@
 
 
 
-RoboMiner::RoboMiner(int cx, int cy, Frame *fr) : cell_x(cx),
-	  					  cell_y(cy),
+RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
+						  cell_x(cx),
 						  frame(fr),
 						  energy(2000)
 {
 //	pixels = new uint32_t[4*4];
-	setCell(&(frame->getGround()->getCell(cx, cy)));
+	setCell(&(frame->getGround()->getCell(cy, cx)));
 	
 }
 
@@ -73,36 +73,38 @@ void RoboMiner::setCell(Cell *c)
 }
 
 
-void RoboMiner::move(int cx, int cy)
+void RoboMiner::move(int cy, int cx)
 {
 
 	Ground *gr = frame->getGround();
 	int maxCell_x = gr->getCols();
 	int maxCell_y = gr->getRows();
 
-	if(cx<0 || cx>maxCell_x)
+	if(cx<0 || cx>=maxCell_x)
 		return;
 
-	if(cy<0 || cy>maxCell_y)
+	if(cy<0 || cy>=maxCell_y)
 		return;
 
-/*	std::cout << "Moving from (" << cell_x << "," << cell_y << ")"
-		  << " to (" << cx << "," << cy << ")" << std::endl;
+/*	std::cout << "Moving from (" << cell_y << "," << cell_x << ")"
+		  << " Cell(" << cell->getY() << "," << cell->getX() << ")"
+		  << " to (" << cy << "," << cx << ") with max_y: "
+		  <<  maxCell_y << " max_x: " << maxCell_x << std::endl;
 */
-	Cell *destcell = &(gr->getCell(cx, cy));
+	Cell *destcell = &(gr->getCell(cy, cx));
 	cell->clearMiner();
 	if(!destcell->isDrilled())
-		drill(cx, cy);
+		drill(cy, cx);
 	cell = destcell;
 	cell->hasMiner(this);
-	cell_x = cx;
 	cell_y = cy;
+	cell_x = cx;
 }
 
 
-int RoboMiner::drill(int cx, int cy)
+int RoboMiner::drill(int cy, int cx)
 {
-	Cell &c = frame->getGround()->getCell(cx, cy);
+	Cell &c = frame->getGround()->getCell(cy, cx);
 	c.setDrilled(true);
 
 	return 0;
@@ -112,8 +114,8 @@ int RoboMiner::drill(int cx, int cy)
 void RoboMiner::action()
 {
 
-	if(rand() % 512 >= 77)
-		return;
+//	if(rand() % 512 >= 77)
+//		return;
 
 	int offset_x=0, offset_y=0;
 	int roll = rand() % 512;
@@ -128,10 +130,11 @@ void RoboMiner::action()
 		  << offset_y << "  from roll: " << roll
 		  << std::endl;
 */
-	move(cell_x + offset_x, cell_y + offset_y);
+	move(cell_y + offset_y, cell_x + offset_x);
 
-	if(cell->mineralCount())
+	if(cell->mineralCount() > 0){
 		mine();
+	}
 }
 
 
@@ -142,7 +145,7 @@ void RoboMiner::mine()
 
 	std::vector<Mineral *> *output = cell->extract(5);
 
-	std::cout << "Mining (" << cell_x << "," << cell_y
+	std::cout << "Mining (" << cell_y << "," << cell_x
 		  << ") yields:" << std::endl;
 
 	int idx = 1;
@@ -150,5 +153,51 @@ void RoboMiner::mine()
 		std::cout << '\t' << "[" << idx++ << "] "
 			  << m->getYield() << " units of "
 			  << m->getName() << std::endl;
+	}
+
+	process(output);
+}
+
+
+void RoboMiner::process(std::vector<Mineral *> *ores)
+{
+	bool present = false;
+	Mineral *inCargo = nullptr;
+
+	for(auto& m: *ores){
+		for(auto& c: cargo){
+			if(c->getName() == m->getName()){
+				present = true;
+				inCargo = c;
+			}
+		}
+		if(!present)
+			cargo.push_back(&(*m));
+		else{
+			inCargo->setYield(inCargo->getYield() + m->getYield());
+			m->setYield(0);
+		}
+		present = false;
+	}
+
+	Mineral *m;
+	for(auto it = ores->begin(); it != ores->end(); ){
+		m = *it;
+		if(!m->getYield()){
+//			std::cout << "Erasing from ores: " << m->getName() << std::endl;
+			delete m;
+			ores->erase(it);
+		}else{
+			it++;
+		}
+	}
+
+//	std::cout << "ores emptied: " << ores->size() << std::endl;
+	std::cout << "Cargo:" << std::endl;
+	int idx = 1;
+	for(auto& c: cargo){
+		std::cout << '\t' << "[" << idx++ << "] "
+			  << c->getName() << " : " << c->getYield()
+			  << " units" << std::endl;
 	}
 }

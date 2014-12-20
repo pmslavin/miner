@@ -10,19 +10,20 @@ class Mineral;
 class RoboMiner
 {
 public:
-	RoboMiner(int cx, int cy, Frame *fr=nullptr);
+	RoboMiner(int cy, int cx, Frame *fr=nullptr);
 	virtual ~RoboMiner();
 	void draw(uint32_t *pixels);
 	int getX() const;
 	int getY() const;
 	void setCell(Cell *c);
-	int drill(int cx, int cy);
-	void move(int cx, int cy);
+	int drill(int cy, int cx);
+	void move(int cy, int cx);
 	void action();
 	void mine();
+	void process(std::vector<Mineral *> *ores);
 protected:
-	int cell_x;
 	int cell_y;
+	int cell_x;
 	Frame *frame;
 	Cell *cell;
 	std::vector<Mineral *> cargo;

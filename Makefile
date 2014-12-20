@@ -1,5 +1,5 @@
 CXX	:= g++
-CXXFLAGS:= -std=c++11
+CXXFLAGS:= -std=c++11 -g
 WARN	:= -Wall
 OBJECTS	:= Cell.o Mineral.o Iron.o Copper.o Gold.o Diamond.o Ground.o Surface.o Frame.o RoboMiner.o
 LIBS	:= -lSDL2

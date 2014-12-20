@@ -3,6 +3,7 @@
 #include "Copper.h"
 #include "Gold.h"
 #include "Diamond.h"
+#include <iostream>
 
 
 Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
@@ -29,6 +30,8 @@ Ground::~Ground()
 Cell& Ground::getCell(int y, int x)
 {
 	if((x < 0 || x >= cell_cols) || (y < 0 || y >= cell_rows)){
+		std::cerr << "G->getCell() error: (" << y << ","
+			  << x << ")" << std::endl;
 		throw std::exception();
 	}
 	return cells[y*cell_cols + x]; 
@@ -40,6 +43,7 @@ void Ground::calcMinerals()
 	for(auto& c: cells){
 		if(rand() % 36 == 0)
 			c.addMineral(new Iron(rand() % 180));
+//			c.addMineral(new Iron(5));
 
 		if(rand() % 64 == 7 && c.getY() > cell_rows/4)
 			c.addMineral(new Copper(rand() % 128));

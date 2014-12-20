@@ -29,6 +29,15 @@ int Mineral::getYield() const
 }
 
 
+void Mineral::setYield(int y)
+{
+	if(y < 0)
+		y = 0;
+
+	yield = y;
+}
+
+
 Mineral::~Mineral()
 {
 //	std::cout << "Destructing " << name << std::endl;

@@ -3,6 +3,7 @@
 #include "Ground.h"
 #include "RoboMiner.h"
 #include <iostream>
+#include <algorithm>
 
 
 Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
@@ -123,7 +124,6 @@ void Cell::drawDrilled(Uint32 *pixels)
 		for(int c=0; c<cell_w; ++c){
 			pixels[r*w+c] = 0x008C918E;
 //			pixels[r*w+c] = 0x009DA39F;
-//			pixels[r*w+c] = 0x00C9C1C6;
 		}
 	}
 }
@@ -173,5 +173,20 @@ std::vector<Mineral *> *Cell::extract(int quant)
 		ores->push_back(m->extract(quant));
 	}
 
+	Mineral *m;
+	for(auto it = minerals.begin(); it != minerals.end(); ){
+		m = *it;
+		if(!m->getYield()){
+//			std::cout << "Erasing " << m->getName() << "("
+//				  << y << "," << x << ")" << std::endl;
+			delete m;
+			minerals.erase(it);
+		}else{
+			it++;
+		}
+	}
+//	minerals.erase(std::remove_if(std::begin(minerals), std::end(minerals), isEmpty), std::end(minerals)); 
 	return ores;
 }
+
+

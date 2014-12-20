@@ -3,18 +3,23 @@
 
 Frame::Frame(int w, int h) : width(w), height(h)
 {
+	const int surface_height = 56;
+
 	ground = new Ground(w, h);
-	surface = new Surface(w, 56);
+	surface = new Surface(w, surface_height);
 
 	int gr_cols = ground->getCols();
+	int gr_rows = ground->getRows();
 
-	miner = new RoboMiner(24, gr_cols/2, this);
+	miner = new RoboMiner(gr_rows-16, gr_cols/2, this);
 
-	Cell& rmcell = ground->getCell(24, gr_cols/2);
+	Cell& rmcell = ground->getCell(gr_rows-16, gr_cols/2);
 	rmcell.hasMiner(miner);
 
-	lower = {0, 56, w, h};
-	upper = {0, 0, w, 56};
+	lower = {0, surface_height, w, h};
+	upper = {0, 0, w, surface_height};
+
+	srand(1977);
 }
 
 

@@ -15,7 +15,9 @@ public:
 	virtual const std::string getName() const;
 	virtual const std::string getSymbol() const;
 	virtual int getYield() const;
+	void setYield(int y);
 	friend std::ostream& operator<<(std::ostream& ostr, Mineral& m);
+//	virtual Mineral& operator+(const Mineral& rhs) = 0;
 	void setParent(Cell *parent);
 	Cell *getParent() const;
 	virtual void draw(Uint32 *pixels) = 0;

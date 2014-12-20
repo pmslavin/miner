@@ -42,6 +42,11 @@ void Iron::draw(Uint32 *pixels)
 	int mid = 0x47 * yield/180.0;
 	int least = 0x14 * yield/180.0;
 
+
+/*	int most = 0xE0;
+	int mid = 0x47;
+	int least = 0x14;
+*/
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
 			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
