@@ -149,7 +149,12 @@ void RoboMiner::mine()
 	if(!cell->mineralCount() || isFull())
 		return;
 
-	std::vector<Mineral *> *output = cell->extract(5);
+	int extract_quant = 5;
+
+	if(getRemainingSpace() < extract_quant)
+		extract_quant = getRemainingSpace();
+
+	std::vector<Mineral *> *output = cell->extract(extract_quant);
 
 	std::cout << "Mining (" << cell_y << "," << cell_x
 		  << ") yields:" << std::endl;
@@ -305,12 +310,28 @@ done:
 
 bool RoboMiner::isFull() const
 {
-	int onboard = 0;
+/*	int onboard = 0;
 
 	for(auto& m: cargo)
 		onboard += m->getYield();
 
 	return onboard >= max_cargo;
+*/
+	return (getRemainingSpace() == 0);
+}
+
+
+int RoboMiner::getRemainingSpace() const
+{
+	int onboard = 0;
+
+	for(auto& m: cargo)
+		onboard += m->getYield();
+
+	if(onboard > max_cargo)
+		onboard = max_cargo;
+
+	return max_cargo - onboard;
 }
 
 

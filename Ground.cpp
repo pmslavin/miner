@@ -3,6 +3,7 @@
 #include "Copper.h"
 #include "Gold.h"
 #include "Diamond.h"
+#include "Uranium.h"
 #include <iostream>
 
 
@@ -45,13 +46,16 @@ void Ground::calcMinerals()
 			c.addMineral(new Iron(rand() % 180));
 //			c.addMineral(new Iron(5));
 
-		if(rand() % 64 == 7 && c.getY() > cell_rows/4)
+		if(rand() % 64 == 7 && c.getY() > cell_rows/6)
 			c.addMineral(new Copper(rand() % 128));
 
-		if(rand() % 128 == 77 && c.getY() > cell_rows/1.7)
+		if(rand() % 128 == 77 && c.getY() > cell_rows/2)
 			c.addMineral(new Gold(rand() % 96));
 
-		if(rand() % 512 == 77 && c.getY() > cell_rows/1.3)
+		if(rand() % 256 == 77 && c.getY() > cell_rows/1.8)
+			c.addMineral(new Uranium(rand() % 76));
+
+		if(rand() % 400 == 77 && c.getY() > cell_rows/1.4)
 			c.addMineral(new Diamond(rand() % 256));
 	}
 }

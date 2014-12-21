@@ -20,6 +20,7 @@ public:
 	void move(int cy, int cx);
 	void action();
 	bool isFull() const;
+	int getRemainingSpace() const;
 protected:
 	int cell_y;
 	int cell_x;

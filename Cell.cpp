@@ -102,6 +102,7 @@ std::ostream& operator<<(std::ostream& ostr, Cell& c)
 void Cell::drawMinerals(Uint32 *pixels)
 {
 
+//	if(isDrilled())
 	if(isDrilled() && minerals.empty())
 		drawDrilled(pixels);
 
@@ -122,7 +123,8 @@ void Cell::drawDrilled(Uint32 *pixels)
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[r*w+c] = 0x008C918E;
+			pixels[r*w+c] = 0x00818582;
+//			pixels[r*w+c] = 0x008C918E;
 //			pixels[r*w+c] = 0x009DA39F;
 		}
 	}
