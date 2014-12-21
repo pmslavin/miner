@@ -19,8 +19,7 @@ public:
 	int drill(int cy, int cx);
 	void move(int cy, int cx);
 	void action();
-	void mine();
-	void process(std::vector<Mineral *> *ores);
+	bool isFull() const;
 protected:
 	int cell_y;
 	int cell_x;
@@ -28,6 +27,13 @@ protected:
 	Cell *cell;
 	std::vector<Mineral *> cargo;
 	int energy;
+	void mine();
+	void process(std::vector<Mineral *> *ores);
+	void setDestination(int cy, int cx);
+	Cell *destCell;
+	void navigate();
+	int max_cargo;
+	void emptyCargo();
 };
 
 #endif

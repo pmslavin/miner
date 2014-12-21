@@ -8,11 +8,13 @@
 RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  cell_x(cx),
 						  frame(fr),
-						  energy(2000)
+						  energy(1000),
+						  destCell(nullptr),
+						  max_cargo(100)
 {
 //	pixels = new uint32_t[4*4];
 	setCell(&(frame->getGround()->getCell(cy, cx)));
-	
+	setDestination(160, 128);	
 }
 
 
@@ -117,20 +119,24 @@ void RoboMiner::action()
 //	if(rand() % 512 >= 77)
 //		return;
 
-	int offset_x=0, offset_y=0;
-	int roll = rand() % 512;
-
-	if(roll >= 255){
-		offset_x = (roll % 2) ? 1 : -1;
+	if(destCell){
+		navigate();
 	}else{
-		offset_y = (roll % 2) ? 1 : -1;
-	}
+		int offset_x=0, offset_y=0;
+		int roll = rand() % 512;
 
-/*	std::cout << "[action] off_x: " << offset_x << "  off_y: "
-		  << offset_y << "  from roll: " << roll
-		  << std::endl;
+		if(roll >= 255){
+			offset_x = (roll % 2) ? 1 : -1;
+		}else{
+			offset_y = (roll % 2) ? 1 : -1;
+		}
+
+/*		std::cout << "[action] off_x: " << offset_x << "  off_y: "
+			  << offset_y << "  from roll: " << roll
+			  << std::endl;
 */
-	move(cell_y + offset_y, cell_x + offset_x);
+		move(cell_y + offset_y, cell_x + offset_x);
+	}
 
 	if(cell->mineralCount() > 0){
 		mine();
@@ -140,7 +146,7 @@ void RoboMiner::action()
 
 void RoboMiner::mine()
 {
-	if(!cell->mineralCount())
+	if(!cell->mineralCount() || isFull())
 		return;
 
 	std::vector<Mineral *> *output = cell->extract(5);
@@ -161,6 +167,9 @@ void RoboMiner::mine()
 
 void RoboMiner::process(std::vector<Mineral *> *ores)
 {
+	if(isFull())
+		return;
+
 	bool present = false;
 	Mineral *inCargo = nullptr;
 
@@ -199,5 +208,118 @@ void RoboMiner::process(std::vector<Mineral *> *ores)
 		std::cout << '\t' << "[" << idx++ << "] "
 			  << c->getName() << " : " << c->getYield()
 			  << " units" << std::endl;
+	}
+
+	if(isFull()){
+		std::cout << "Cargo Full: Returning to base..." << std::endl;
+		setDestination(0, 128);
+	}
+}
+
+
+void RoboMiner::setDestination(int cy, int cx)
+{
+	destCell = &(frame->getGround()->getCell(cy, cx));
+}
+
+
+void RoboMiner::navigate()
+{
+	int dest_y = destCell->getY();
+	int dest_x = destCell->getX();
+
+	int y_off = cell_y - dest_y;
+	int x_off = cell_x - dest_x;
+
+	int move_x = 0, move_y = 0;
+	Ground *g = frame->getGround();
+	Cell& up = g->getCell((cell_y-1 >= 0 ? cell_y-1 : 0), cell_x);
+	Cell& down = g->getCell((cell_y+1 < g->getRows() ? cell_y+1 : g->getRows()), cell_x);
+	Cell& right = g->getCell(cell_y, (cell_x+1 < g->getCols() ? cell_x+1 : g->getCols()));
+	Cell& left = g->getCell(cell_y, (cell_x-1 >= 0 ? cell_x-1 : 0));
+
+	if(y_off > 0){
+		if(x_off > 0){
+			if(left.isDrilled()){
+				move_x = -1;
+				goto done;
+			}
+		}else if(x_off < 0){
+			if(right.isDrilled()){
+				move_x = 1;
+				goto done;
+			}
+		}
+		move_y = -1;
+	}else if(y_off < 0){
+		if(x_off > 0){
+			if(left.isDrilled()){
+				move_x = -1;
+				goto done;
+			}
+		}else if(x_off < 0){
+			if(right.isDrilled()){
+				move_x = 1;
+				goto done;
+			}
+		}
+		move_y = 1;
+		
+	}else if(x_off > 0){
+		if(y_off > 0){
+			if(up.isDrilled()){
+				move_y = -1;
+				goto done;
+			}
+		}else if(y_off < 0){
+			if(down.isDrilled()){
+				move_y = 1;
+				goto done;
+			}
+		}
+		move_x = -1;
+	}else if(x_off < 0){
+		if(y_off > 0){
+			if(up.isDrilled()){
+				move_y = -1;
+				goto done;
+			}
+		}else if(y_off < 0){
+			if(down.isDrilled()){
+				move_y = 1;
+				goto done;
+			}
+		}
+		move_x = 1;
+	}
+
+done:
+	move(cell_y + move_y, cell_x + move_x);
+	
+	if(dest_y == cell_y && dest_x == cell_x){
+		destCell = nullptr;
+		emptyCargo();
+	}
+}
+
+
+bool RoboMiner::isFull() const
+{
+	int onboard = 0;
+
+	for(auto& m: cargo)
+		onboard += m->getYield();
+
+	return onboard >= max_cargo;
+}
+
+
+void RoboMiner::emptyCargo()
+{
+	Mineral *m = nullptr;
+	for(auto it = cargo.begin(); it != cargo.end(); ){
+		m = *it;
+		delete m;
+		cargo.erase(it);
 	}
 }
