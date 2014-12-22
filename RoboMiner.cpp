@@ -10,7 +10,8 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  frame(fr),
 						  energy(1000),
 						  destCell(nullptr),
-						  max_cargo(100)
+						  max_cargo(100),
+						  lastMinedOre(nullptr)
 {
 //	pixels = new uint32_t[4*4];
 	setCell(&(frame->getGround()->getCell(cy, cx)));
@@ -119,6 +120,9 @@ void RoboMiner::action()
 //	if(rand() % 512 >= 77)
 //		return;
 
+	while(cell->mineralCount() > 0 && !isFull())
+		mine();
+
 	if(destCell){
 		navigate();
 	}else{
@@ -138,9 +142,7 @@ void RoboMiner::action()
 		move(cell_y + offset_y, cell_x + offset_x);
 	}
 
-	if(cell->mineralCount() > 0){
-		mine();
-	}
+	
 }
 
 
@@ -151,8 +153,15 @@ void RoboMiner::mine()
 
 	int extract_quant = 5;
 
+	int remain = getRemainingSpace();
+
 	if(getRemainingSpace() < extract_quant)
 		extract_quant = getRemainingSpace();
+
+	if(extract_quant == 0){
+		std::cerr << remain << std::endl;
+		std::cerr << isFull() << std::endl;
+	}
 
 	std::vector<Mineral *> *output = cell->extract(extract_quant);
 
@@ -217,6 +226,7 @@ void RoboMiner::process(std::vector<Mineral *> *ores)
 
 	if(isFull()){
 		std::cout << "Cargo Full: Returning to base..." << std::endl;
+		setLastMinedOre(cell_y, cell_x);
 		setDestination(0, 128);
 	}
 }
@@ -225,6 +235,12 @@ void RoboMiner::process(std::vector<Mineral *> *ores)
 void RoboMiner::setDestination(int cy, int cx)
 {
 	destCell = &(frame->getGround()->getCell(cy, cx));
+}
+
+
+void RoboMiner::setLastMinedOre(int cy, int cx)
+{
+	lastMinedOre = &(frame->getGround()->getCell(cy, cx));
 }
 
 
@@ -239,8 +255,8 @@ void RoboMiner::navigate()
 	int move_x = 0, move_y = 0;
 	Ground *g = frame->getGround();
 	Cell& up = g->getCell((cell_y-1 >= 0 ? cell_y-1 : 0), cell_x);
-	Cell& down = g->getCell((cell_y+1 < g->getRows() ? cell_y+1 : g->getRows()), cell_x);
-	Cell& right = g->getCell(cell_y, (cell_x+1 < g->getCols() ? cell_x+1 : g->getCols()));
+	Cell& down = g->getCell((cell_y+1 < g->getRows() ? cell_y+1 : g->getRows()-1), cell_x);
+	Cell& right = g->getCell(cell_y, (cell_x+1 < g->getCols() ? cell_x+1 : g->getCols()-1));
 	Cell& left = g->getCell(cell_y, (cell_x-1 >= 0 ? cell_x-1 : 0));
 
 	if(y_off > 0){
@@ -304,19 +320,16 @@ done:
 	if(dest_y == cell_y && dest_x == cell_x){
 		destCell = nullptr;
 		emptyCargo();
+		if(lastMinedOre){
+			setDestination(lastMinedOre->getY(), lastMinedOre->getX());
+			lastMinedOre = nullptr;
+		}
 	}
 }
 
 
 bool RoboMiner::isFull() const
 {
-/*	int onboard = 0;
-
-	for(auto& m: cargo)
-		onboard += m->getYield();
-
-	return onboard >= max_cargo;
-*/
 	return (getRemainingSpace() == 0);
 }
 

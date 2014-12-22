@@ -79,9 +79,21 @@ void Iron::draw(Uint32 *pixels)
 
 Iron *Iron::extract(int quant)
 {
+//	int orig_quant = quant;
+
 	if(quant > yield)
 		quant = yield;
 
 	yield -= quant;
+
+/* 	if(quant == 0){
+		std::cerr << yield << std::endl;
+		std::cerr << orig_quant << std::endl;
+	}
+Gives...
+0
+5
+...on 0-yield mineral.
+*/
 	return new Iron(quant);
 }

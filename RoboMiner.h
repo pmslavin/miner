@@ -35,6 +35,8 @@ protected:
 	void navigate();
 	int max_cargo;
 	void emptyCargo();
+	void setLastMinedOre(int cy, int cx);
+	Cell *lastMinedOre;
 };
 
 #endif

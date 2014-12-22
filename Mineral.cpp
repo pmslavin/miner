@@ -7,7 +7,11 @@ const std::string Mineral::symbol = "XX";
 
 Mineral::Mineral(int yield, Cell *par) : yield(yield), parent(par)
 {
-
+/* A zero yield shouldn't be instantiated.
+ * But if it is, set it to 1
+ */
+	if(!yield)
+		yield = 1;
 }
 
 

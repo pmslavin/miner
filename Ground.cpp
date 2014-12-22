@@ -43,20 +43,20 @@ void Ground::calcMinerals()
 {
 	for(auto& c: cells){
 		if(rand() % 36 == 0)
-			c.addMineral(new Iron(rand() % 180));
+			c.addMineral(new Iron(rand() % 180 + 1));
 //			c.addMineral(new Iron(5));
 
 		if(rand() % 64 == 7 && c.getY() > cell_rows/6)
-			c.addMineral(new Copper(rand() % 128));
+			c.addMineral(new Copper(rand() % 128 + 1));
 
 		if(rand() % 128 == 77 && c.getY() > cell_rows/2)
-			c.addMineral(new Gold(rand() % 96));
+			c.addMineral(new Gold(rand() % 96 + 1));
 
 		if(rand() % 256 == 77 && c.getY() > cell_rows/1.8)
-			c.addMineral(new Uranium(rand() % 76));
+			c.addMineral(new Uranium(rand() % 76 + 1));
 
 		if(rand() % 400 == 77 && c.getY() > cell_rows/1.4)
-			c.addMineral(new Diamond(rand() % 256));
+			c.addMineral(new Diamond(rand() % 256 + 1));
 	}
 }
 
