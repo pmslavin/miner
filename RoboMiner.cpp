@@ -2,6 +2,7 @@
 #include "Frame.h"
 #include "RoboMiner.h"
 #include "Mineral.h"
+#include "Base.h"
 
 
 
@@ -11,11 +12,13 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  energy(1000),
 						  destCell(nullptr),
 						  max_cargo(100),
-						  lastMinedOre(nullptr)
+						  lastMinedOre(nullptr),
+						  base(nullptr)
 {
 //	pixels = new uint32_t[4*4];
-	setCell(&(frame->getGround()->getCell(cy, cx)));
-	setDestination(160, 128);	
+	setCell(frame->getGround()->getCell(cy, cx));
+	setDestination(160, 128);
+	setBase(frame->getSurface()->getBase());
 }
 
 
@@ -70,9 +73,9 @@ int RoboMiner::getY() const
 }
 
 
-void RoboMiner::setCell(Cell *c)
+void RoboMiner::setCell(Cell& c)
 {
-	cell = c;
+	cell = &c;
 }
 
 
@@ -130,9 +133,9 @@ void RoboMiner::action()
 		int roll = rand() % 512;
 
 		if(roll >= 255){
-			offset_x = (roll % 2) ? 1 : -1;
-		}else{
 			offset_y = (roll % 2) ? 1 : -1;
+		}else{
+			offset_x = (roll % 2) ? 1 : -1;
 		}
 
 /*		std::cout << "[action] off_x: " << offset_x << "  off_y: "
@@ -155,17 +158,12 @@ void RoboMiner::mine()
 
 	int remain = getRemainingSpace();
 
-	if(getRemainingSpace() < extract_quant)
-		extract_quant = getRemainingSpace();
-
-	if(extract_quant == 0){
-		std::cerr << remain << std::endl;
-		std::cerr << isFull() << std::endl;
-	}
+	if(remain < extract_quant)
+		extract_quant = remain;
 
 	std::vector<Mineral *> *output = cell->extract(extract_quant);
 
-	std::cout << "Mining (" << cell_y << "," << cell_x
+/*	std::cout << "Mining (" << cell_y << "," << cell_x
 		  << ") yields:" << std::endl;
 
 	int idx = 1;
@@ -174,12 +172,13 @@ void RoboMiner::mine()
 			  << m->getYield() << " units of "
 			  << m->getName() << std::endl;
 	}
-
-	process(output);
+*/
+	process(*output);
+	delete output;
 }
 
 
-void RoboMiner::process(std::vector<Mineral *> *ores)
+void RoboMiner::process(std::vector<Mineral *>& ores)
 {
 	if(isFull())
 		return;
@@ -187,7 +186,7 @@ void RoboMiner::process(std::vector<Mineral *> *ores)
 	bool present = false;
 	Mineral *inCargo = nullptr;
 
-	for(auto& m: *ores){
+	for(auto& m: ores){
 		for(auto& c: cargo){
 			if(c->getName() == m->getName()){
 				present = true;
@@ -204,28 +203,29 @@ void RoboMiner::process(std::vector<Mineral *> *ores)
 	}
 
 	Mineral *m;
-	for(auto it = ores->begin(); it != ores->end(); ){
+	for(auto it = ores.begin(); it != ores.end(); ){
 		m = *it;
 		if(!m->getYield()){
 //			std::cout << "Erasing from ores: " << m->getName() << std::endl;
 			delete m;
-			ores->erase(it);
+			ores.erase(it);
 		}else{
 			it++;
 		}
 	}
 
 //	std::cout << "ores emptied: " << ores->size() << std::endl;
-	std::cout << "Cargo:" << std::endl;
+/*	std::cout << "Cargo:" << std::endl;
 	int idx = 1;
 	for(auto& c: cargo){
 		std::cout << '\t' << "[" << idx++ << "] "
 			  << c->getName() << " : " << c->getYield()
 			  << " units" << std::endl;
 	}
-
+*/
 	if(isFull()){
 		std::cout << "Cargo Full: Returning to base..." << std::endl;
+		listCargo();
 		setLastMinedOre(cell_y, cell_x);
 		setDestination(0, 128);
 	}
@@ -319,7 +319,11 @@ done:
 	
 	if(dest_y == cell_y && dest_x == cell_x){
 		destCell = nullptr;
-		emptyCargo();
+		if(atBase()){
+			base->deposit(cargo);
+			emptyCargo();
+		}
+//		emptyCargo();
 		if(lastMinedOre){
 			setDestination(lastMinedOre->getY(), lastMinedOre->getX());
 			lastMinedOre = nullptr;
@@ -356,4 +360,30 @@ void RoboMiner::emptyCargo()
 		delete m;
 		cargo.erase(it);
 	}
+
+}
+
+
+void RoboMiner::setBase(Base *b)
+{
+	base = b;
+}
+
+
+bool RoboMiner::atBase() const
+{
+	return (cell_y == base->getY() && cell_x == base->getX());
+}
+
+
+void RoboMiner::listCargo() const
+{
+	std::cout << "[Cargo]" << std::endl;
+	int idx = 1;
+	for(auto& c: cargo){
+		std::cout << '\t' << "[" << idx++ << "] "
+			  << c->getName() << " : " << c->getYield()
+			  << " units" << std::endl;
+	}
+
 }

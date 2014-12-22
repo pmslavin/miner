@@ -1,4 +1,5 @@
 #include "Surface.h"
+#include "Base.h"
 #include <cstring>
 
 Surface::Surface(int w, int h, Frame *fr) : width(w),
@@ -6,12 +7,14 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 					    frame(fr)
 {
 	pixels = new Uint32[w*h];
+	base = new Base(24, 20, 0, 128, this);
 }
 
 
 Surface::~Surface()
 {
 	delete [] pixels;
+	delete base;
 }
 
 
@@ -46,10 +49,33 @@ void Surface::draw()
 		pixels[i*width+width/2+2] = 0x00818582;
 		pixels[i*width+width/2+3] = 0x00818582;
 	}
+
+	int basetop = height-base->getHeight()-grass_height;
+
+	base->draw(&pixels[width*basetop+(width/2-base->getWidth()/2)+2]);
+
 }
 
 
 const Uint32 *Surface::getPixels() const
 {
 	return pixels;
+}
+
+
+Base *Surface::getBase() const
+{
+	return base;
+}
+
+
+int Surface::getWidth() const
+{
+	return width;
+}
+
+
+int Surface::getHeight() const
+{
+	return height;
 }

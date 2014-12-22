@@ -6,6 +6,7 @@
 
 class Frame;
 class Mineral;
+class Base;
 
 class RoboMiner
 {
@@ -15,12 +16,15 @@ public:
 	void draw(uint32_t *pixels);
 	int getX() const;
 	int getY() const;
-	void setCell(Cell *c);
+	void setCell(Cell& c);
 	int drill(int cy, int cx);
 	void move(int cy, int cx);
 	void action();
 	bool isFull() const;
 	int getRemainingSpace() const;
+	void setBase(Base *b);
+	bool atBase() const;
+	void listCargo() const;
 protected:
 	int cell_y;
 	int cell_x;
@@ -29,7 +33,7 @@ protected:
 	std::vector<Mineral *> cargo;
 	int energy;
 	void mine();
-	void process(std::vector<Mineral *> *ores);
+	void process(std::vector<Mineral *>& ores);
 	void setDestination(int cy, int cx);
 	Cell *destCell;
 	void navigate();
@@ -37,6 +41,7 @@ protected:
 	void emptyCargo();
 	void setLastMinedOre(int cy, int cx);
 	Cell *lastMinedOre;
+	Base *base;
 };
 
 #endif

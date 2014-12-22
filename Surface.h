@@ -6,6 +6,7 @@
 typedef uint32_t Uint32;
 
 class Frame;
+class Base;
 
 class Surface{
 public:
@@ -13,11 +14,15 @@ public:
 	virtual ~Surface();
 	void draw();
 	const Uint32 *getPixels() const;
+	Base *getBase() const;
+	int getWidth() const;
+	int getHeight() const;
 protected:
 	int width;
 	int height;
 	Frame *frame;
 	Uint32 *pixels;
+	Base *base;
 };
 
 #endif
