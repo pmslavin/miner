@@ -16,8 +16,19 @@ Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
 		cells.push_back(Cell(4, 4, i%cell_cols, i/cell_cols, this));
 	}
 
-	pixels = new Uint32[w*h];
+	pixels = new Uint32[width*height];
+	memset(pixels, 0, width*height*sizeof(Uint32));
 
+/*	int most = 0x2E;
+	int mid = 0x13;
+	int least = 0x00;
+
+	for(int r=0; r<h; ++r){
+		for(int c=0; c<w; ++c){
+			pixels[r*w+c] = (0x00<<24) + (most*(h-r)/h << 16) + (mid*(h-r)/h << 8) + least*(h-r)/h;
+		}
+	}
+*/
 	calcMinerals();
 }
 
@@ -95,8 +106,19 @@ void Ground::clearCells()
 void Ground::draw()
 {
 	
-	memset(pixels, 0, width*height*sizeof(Uint32));
+//	memset(pixels, 0, width*height*sizeof(Uint32));
+/*	int most = 0x2E;
+	int mid = 0x13;
+	int least = 0x00;
 
+	for(int r=0; r<height; ++r){
+		for(int c=0; c<width; ++c){
+			pixels[r*width+c] = (0x00<<24)  + (most*(height-r)/height << 16)
+							+ (mid*(height-r)/height << 8)
+							+ least*(height-r)/height;
+		}
+	}
+*/
 	for(auto& c: cells)
 		c.drawMinerals(&pixels[width*c.getY()*c.getHeight()+c.getX()*c.getWidth()]);
 }

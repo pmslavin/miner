@@ -7,7 +7,7 @@
 #include <iostream>
 const int w=1024, h=896;
 
-int main(int argc, char *argv[])
+int main()
 {
 
 	bool active = true;
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
-		SDL_Delay(20);
+//		SDL_Delay(50);
 		rm->action();
 //		rm->move(25, 25);
 	}

@@ -22,7 +22,7 @@ void Surface::draw()
 {
 	int i, j;
 	const int grass_height = 14;
-	const int soil_height = 4;
+	const int soil_height = 8;
 
 	for(i=0; i<height-grass_height; ++i){
 		for(j=0; j<width; ++j){
@@ -51,7 +51,7 @@ void Surface::draw()
 		pixels[i*width+width/2+3] = 0x00606060;
 	}
 
-	int basetop = height-base->getHeight()-grass_height;
+	int basetop = height-base->getHeight()-soil_height;
 
 	base->draw(&pixels[width*basetop+(width/2-base->getWidth()/2)+2]);
 

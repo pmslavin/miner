@@ -406,8 +406,8 @@ void RoboMiner::scan()
 
 	std::vector<Cell *> scope;
 
-	std::cout << "scan from (" << cell_y << "," << cell_x
-		  << ")" << std::endl;
+//	std::cout << "scan from (" << cell_y << "," << cell_x
+//		  << ")" << std::endl;
 
 	for(xdist=-x_radius; xdist<=x_radius; ++xdist){
 		for(ydist=-y_radius; ydist<=y_radius; ++ydist){
@@ -420,8 +420,8 @@ void RoboMiner::scan()
 		}
 	}
 
-	std::cout << "\ty_r: " << y_radius << "  x_r: "
-		  << x_radius << "  tc: " << scope.size() << std::endl;
+//	std::cout << "\ty_r: " << y_radius << "  x_r: "
+//		  << x_radius << "  tc: " << scope.size() << std::endl;
 
 	for(auto& c: scope){
 //		std::cout << "(" << c->getY() << ","
