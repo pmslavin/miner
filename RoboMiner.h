@@ -25,6 +25,7 @@ public:
 	void setBase(Base *b);
 	bool atBase() const;
 	void listCargo() const;
+	void scan();
 protected:
 	int cell_y;
 	int cell_x;

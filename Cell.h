@@ -34,6 +34,7 @@ public:
 	bool isDrilled() const;
 	void drawDrilled(Uint32 *pixels);
 	std::vector<Mineral *> *extract(int quant);
+	int distanceFrom(const Cell& c) const;
 protected:
 	int width;
 	int height;

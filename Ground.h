@@ -12,7 +12,7 @@ class Ground
 public:
 	Ground(int w, int h, Frame *fr=nullptr);
 	virtual ~Ground();
-	Cell& getCell(int x, int y);
+	Cell& getCell(int y, int x);
 	int getRows() const;
 	int getCols() const;
 	int getWidth() const;

@@ -120,8 +120,8 @@ int RoboMiner::drill(int cy, int cx)
 void RoboMiner::action()
 {
 
-//	if(rand() % 512 >= 77)
-//		return;
+	if(rand() % 512 < 48)
+		scan();
 
 	while(cell->mineralCount() > 0 && !isFull())
 		mine();
@@ -201,7 +201,10 @@ void RoboMiner::process(std::vector<Mineral *>& ores)
 		}
 		present = false;
 	}
-
+/* Minerals not deleted here are now owned by the RM.
+ * Erase their iter from the vector, but don't
+ * destruct the Mineral itself.
+ */
 	Mineral *m;
 	for(auto it = ores.begin(); it != ores.end(); ){
 		m = *it;
@@ -215,14 +218,7 @@ void RoboMiner::process(std::vector<Mineral *>& ores)
 	}
 
 //	std::cout << "ores emptied: " << ores->size() << std::endl;
-/*	std::cout << "Cargo:" << std::endl;
-	int idx = 1;
-	for(auto& c: cargo){
-		std::cout << '\t' << "[" << idx++ << "] "
-			  << c->getName() << " : " << c->getYield()
-			  << " units" << std::endl;
-	}
-*/
+//	listCargo();
 	if(isFull()){
 		std::cout << "Cargo Full: Returning to base..." << std::endl;
 		listCargo();
@@ -385,5 +381,54 @@ void RoboMiner::listCargo() const
 			  << c->getName() << " : " << c->getYield()
 			  << " units" << std::endl;
 	}
+
+}
+
+
+void RoboMiner::scan()
+{
+	int radius = 8;
+	int x_radius = radius, y_radius = radius;
+	int xdist, ydist;
+
+
+	Ground *g = frame->getGround();
+	
+	if(cell_x + x_radius > g->getCols())
+		x_radius = g->getCols()-1-cell_x;
+	else if(cell_x - x_radius < 0)
+		x_radius = cell_x;
+
+	if(cell_y + y_radius > g->getRows())
+		y_radius = g->getRows()-1-cell_y;
+	else if(cell_y - y_radius < 0)
+		y_radius = cell_y;
+
+	std::vector<Cell *> scope;
+
+	std::cout << "scan from (" << cell_y << "," << cell_x
+		  << ")" << std::endl;
+
+	for(xdist=-x_radius; xdist<=x_radius; ++xdist){
+		for(ydist=-y_radius; ydist<=y_radius; ++ydist){
+			if((abs(ydist)+abs(xdist))>radius)
+				continue;
+			if(ydist==0 && xdist==0)
+				continue;
+			Cell& scan_cell = g->getCell(cell_y+ydist, cell_x+xdist);
+			scope.push_back(&scan_cell);
+		}
+	}
+
+	std::cout << "\ty_r: " << y_radius << "  x_r: "
+		  << x_radius << "  tc: " << scope.size() << std::endl;
+
+	for(auto& c: scope){
+//		std::cout << "(" << c->getY() << ","
+//			  << c->getX() << ")" << std::endl;
+		c->setVisible(true);
+	}
+
+	
 
 }

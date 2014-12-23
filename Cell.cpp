@@ -101,6 +101,8 @@ std::ostream& operator<<(std::ostream& ostr, Cell& c)
 
 void Cell::drawMinerals(Uint32 *pixels)
 {
+	if(!isVisible())
+		return;
 
 //	if(isDrilled())
 	if(isDrilled() && minerals.empty())
@@ -157,6 +159,7 @@ bool Cell::isVisible() const
 void Cell::setDrilled(bool isdrilled)
 {
 	drilled = isdrilled;
+	setVisible(true);
 }
 
 
@@ -191,3 +194,10 @@ std::vector<Mineral *> *Cell::extract(int quant)
 }
 
 
+int Cell::distanceFrom(const Cell& c) const
+{
+	int xmoves = abs(getX() - c.getX());
+	int ymoves = abs(getY() - c.getY());
+
+	return xmoves + ymoves;
+}

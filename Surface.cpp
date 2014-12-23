@@ -44,10 +44,11 @@ void Surface::draw()
 		for(j=0; j<width; ++j){
 			pixels[i*width+j] = 0x005C1C00;
 		}
-		pixels[i*width+width/2] = 0x00818582;
-		pixels[i*width+width/2+1] = 0x00818582;
-		pixels[i*width+width/2+2] = 0x00818582;
-		pixels[i*width+width/2+3] = 0x00818582;
+//		pixels[i*width+width/2] = 0x00818582;
+		pixels[i*width+width/2] = 0x00606060;
+		pixels[i*width+width/2+1] = 0x00606060;
+		pixels[i*width+width/2+2] = 0x00606060;
+		pixels[i*width+width/2+3] = 0x00606060;
 	}
 
 	int basetop = height-base->getHeight()-grass_height;
