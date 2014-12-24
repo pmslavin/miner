@@ -43,6 +43,7 @@ protected:
 	void setLastMinedOre(int cy, int cx);
 	Cell *lastMinedOre;
 	Base *base;
+	bool exploring;
 };
 
 #endif

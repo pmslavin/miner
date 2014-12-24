@@ -90,7 +90,7 @@ int main()
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
-//		SDL_Delay(50);
+//		SDL_Delay(40);
 		rm->action();
 //		rm->move(25, 25);
 	}

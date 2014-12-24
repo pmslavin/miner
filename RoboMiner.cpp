@@ -13,7 +13,8 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  destCell(nullptr),
 						  max_cargo(100),
 						  lastMinedOre(nullptr),
-						  base(nullptr)
+						  base(nullptr),
+						  exploring(false)
 {
 //	pixels = new uint32_t[4*4];
 	setCell(frame->getGround()->getCell(cy, cx));
@@ -120,7 +121,9 @@ int RoboMiner::drill(int cy, int cx)
 void RoboMiner::action()
 {
 
-	if(rand() % 512 < 48)
+//	if(rand() % 512 < 48)
+//		scan();
+	if(!destCell || exploring)
 		scan();
 
 	while(cell->mineralCount() > 0 && !isFull())
@@ -388,29 +391,30 @@ void RoboMiner::listCargo() const
 void RoboMiner::scan()
 {
 	int radius = 8;
-	int x_radius = radius, y_radius = radius;
+	int up_radius = radius, down_radius = radius;
+	int left_radius = radius, right_radius = radius;
 	int xdist, ydist;
 
 
 	Ground *g = frame->getGround();
 	
-	if(cell_x + x_radius > g->getCols())
-		x_radius = g->getCols()-1-cell_x;
-	else if(cell_x - x_radius < 0)
-		x_radius = cell_x;
+	if(cell_x + right_radius >= g->getCols())
+		right_radius = g->getCols()-1-cell_x;
+	if(cell_x - left_radius < 0)
+		left_radius = cell_x;
 
-	if(cell_y + y_radius > g->getRows())
-		y_radius = g->getRows()-1-cell_y;
-	else if(cell_y - y_radius < 0)
-		y_radius = cell_y;
+	if(cell_y + down_radius >= g->getRows())
+		down_radius = g->getRows()-1-cell_y;
+	if(cell_y - up_radius < 0)
+		up_radius = cell_y;
 
 	std::vector<Cell *> scope;
 
 //	std::cout << "scan from (" << cell_y << "," << cell_x
 //		  << ")" << std::endl;
 
-	for(xdist=-x_radius; xdist<=x_radius; ++xdist){
-		for(ydist=-y_radius; ydist<=y_radius; ++ydist){
+	for(xdist=-left_radius; xdist<=right_radius; ++xdist){
+		for(ydist=-up_radius; ydist<=down_radius; ++ydist){
 			if((abs(ydist)+abs(xdist))>radius)
 				continue;
 			if(ydist==0 && xdist==0)
@@ -422,11 +426,37 @@ void RoboMiner::scan()
 
 //	std::cout << "\ty_r: " << y_radius << "  x_r: "
 //		  << x_radius << "  tc: " << scope.size() << std::endl;
-
+	int mineralCount = 0;
+	Cell *hasMinerals = nullptr;
 	for(auto& c: scope){
-//		std::cout << "(" << c->getY() << ","
-//			  << c->getX() << ")" << std::endl;
 		c->setVisible(true);
+		if(c->mineralCount()){
+			mineralCount += c->mineralCount();
+			hasMinerals = c;
+		}
+		
+	}
+
+	if(!mineralCount && !destCell){
+		int roll = rand() % 4;
+		int x_off=0, y_off=0;
+		switch(roll){
+			case 0:	y_off = -up_radius;
+				break;
+			case 1: x_off = right_radius;
+				break;
+			case 2: y_off = down_radius;
+				break;
+			case 3: x_off = -left_radius;
+				break;
+		}
+		std::cout << "Exploring to: (" << cell_y+y_off
+			  << "," << cell_x+x_off << ")" << std::endl;
+		setDestination(cell_y + y_off, cell_x + x_off);
+		exploring = true;
+	}else if(mineralCount && !destCell){
+		exploring = false;
+		setDestination(hasMinerals->getY(), hasMinerals->getX());
 	}
 
 	
