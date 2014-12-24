@@ -10,7 +10,6 @@ const int w=1024, h=896;
 int main()
 {
 
-	bool active = true;
 //	Ground g(w, h);
 //	Surface s(w, 56);
 	Frame frame(w, h);
@@ -68,6 +67,10 @@ int main()
 //	frame.getGround()->calcMinerals();
 	RoboMiner *rm = frame.getMiner();
 
+	bool active = true;
+	bool paused = false;
+	unsigned int delay = 100;
+
 	while(active){
 //		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));
 //		SDL_UpdateTexture(texture, &lower, g.getPixels(), w*sizeof(Uint32));
@@ -82,6 +85,12 @@ int main()
 			case SDL_KEYDOWN:
 				if(event.key.keysym.sym == SDLK_q)
 					active = false;
+				if(event.key.keysym.sym == SDLK_p)
+					paused = !paused;
+				if(event.key.keysym.sym == SDLK_COMMA)
+					delay = (delay <= 20) ? 0 : (delay-20);
+				if(event.key.keysym.sym == SDLK_PERIOD)
+					delay += 20;
 				break;
 			}
 		}
@@ -90,8 +99,9 @@ int main()
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
 
-//		SDL_Delay(40);
-		rm->action();
+		SDL_Delay(delay);
+		if(!paused)
+			rm->action();
 //		rm->move(25, 25);
 	}
 

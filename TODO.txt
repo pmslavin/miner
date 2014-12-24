@@ -1,8 +1,9 @@
 [1]  MineralStore class for rm.cargo, ores, base.store: Replaces std::vector<Mineral *>.
 [2]  Colours namespace.
-[3]  Scan locale, move directly to radius if no minerals.
+[3]  Scan locale, move directly to radius if no minerals.					DONE
 [4]  Make Drill(rate), Scan(radius), EnergyPack(capacity), components of rm.
 [5]  Shortest route back to base.
 [6]  List of known mineral locations.
 [7]  Prioritise Minerals by type.
-[8]  Cell colour according to depth, Fog for invible cells.
+[8]  Cell colour according to depth, Fog for invible cells.					DONE
+[9]  Pause (p), inc/dec speed (</>)								DONE
