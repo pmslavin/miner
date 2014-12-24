@@ -11,7 +11,7 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  frame(fr),
 						  energy(1000),
 						  destCell(nullptr),
-						  max_cargo(100),
+						  max_cargo(1000),
 						  lastMinedOre(nullptr),
 						  base(nullptr),
 						  exploring(false)
@@ -426,18 +426,16 @@ void RoboMiner::scan()
 
 //	std::cout << "\ty_r: " << y_radius << "  x_r: "
 //		  << x_radius << "  tc: " << scope.size() << std::endl;
-	int mineralCount = 0;
-	Cell *hasMinerals = nullptr;
+	std::vector<const Cell *> mineralCells;
 	for(auto& c: scope){
 		c->setVisible(true);
 		if(c->mineralCount()){
-			mineralCount += c->mineralCount();
-			hasMinerals = c;
+			mineralCells.push_back(c);
 		}
 		
 	}
 
-	if(!mineralCount && !destCell){
+	if(mineralCells.empty() && !destCell){
 		int roll = rand() % 4;
 		int x_off=0, y_off=0;
 		switch(roll){
@@ -454,8 +452,10 @@ void RoboMiner::scan()
 			  << "," << cell_x+x_off << ")" << std::endl;
 		setDestination(cell_y + y_off, cell_x + x_off);
 		exploring = true;
-	}else if(mineralCount && !destCell){
+	}else if(!mineralCells.empty() && !destCell){
 		exploring = false;
+		int roll = rand() % mineralCells.size();
+		const Cell *const hasMinerals = mineralCells[roll];
 		setDestination(hasMinerals->getY(), hasMinerals->getX());
 	}
 
