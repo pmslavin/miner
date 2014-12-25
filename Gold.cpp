@@ -1,5 +1,6 @@
 #include "Gold.h"
 #include "Ground.h"
+#include "constants.h"
 #include <iostream>
 
 const std::string Gold::name = "Gold";
@@ -38,9 +39,9 @@ void Gold::draw(Uint32 *pixels)
 //	pixels[0] += (0x00 << 24) + (yield << 16);
 //	Gold ore 0xF0D000
 
-	int most = 0xF0 * yield/96.0;
-	int mid = 0xD0 * yield/96.0;
-	int least = 0x00 * yield/96.0;
+	const unsigned char most = (Colours::Gold>>16 & 0xFF) * yield/96.0;
+	const unsigned char mid = (Colours::Gold>>8 & 0xFF) * yield/96.0;
+	const unsigned char least = (Colours::Gold & 0xFF) * yield/96.0;
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){

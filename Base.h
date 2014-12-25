@@ -6,6 +6,7 @@
 
 class Mineral;
 class Surface;
+struct SDL_Surface;
 
 class Base
 {
@@ -16,7 +17,7 @@ public:
 	void listStore() const;
 	int getY() const;
 	int getX() const;
-	virtual void draw(uint32_t *pixels);
+	virtual void draw(SDL_Surface *destsurf);
 	int getWidth() const;
 	int getHeight() const;
 protected:
@@ -24,6 +25,7 @@ protected:
 	int y, x;
 	Surface *surface;
 	std::vector<Mineral *> store;
+	SDL_Surface *mine;
 };
 
 #endif

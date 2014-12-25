@@ -2,6 +2,7 @@
 #define _SURFACE_H_
 
 #include <string>
+#include "SDL2/SDL.h"
 
 typedef uint32_t Uint32;
 
@@ -23,6 +24,9 @@ protected:
 	Frame *frame;
 	Uint32 *pixels;
 	Base *base;
+	SDL_Surface *surf;
+	SDL_Surface *tree;
+	SDL_Surface *store;
 };
 
 #endif

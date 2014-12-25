@@ -1,9 +1,11 @@
 #include "Frame.h"
 
+#include <iostream>
+
 
 Frame::Frame(int w, int h) : width(w), height(h)
 {
-	const int surface_height = 56;
+	const int surface_height = 64;
 
 	ground = new Ground(w, h);
 	surface = new Surface(w, surface_height);
@@ -38,6 +40,13 @@ void Frame::draw(SDL_Texture *texture)
 
 	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
 	SDL_UpdateTexture(texture, &lower, ground->getPixels(), width*sizeof(Uint32));
+
+/*	SDL_Surface *tree = SDL_LoadBMP("tree.bmp");
+	SDL_Rect tree_zone = {width-120, 4, tree->w, tree->h};
+	int ret = SDL_UpdateTexture(texture, &tree_zone, tree->pixels, tree->pitch);
+	std::cout << "SDL_UpdateTexture -> " << ret << " : "
+		  << SDL_GetError() << std::endl;
+*/
 }
 
 

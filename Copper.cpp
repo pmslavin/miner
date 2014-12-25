@@ -1,5 +1,6 @@
 #include "Copper.h"
 #include "Ground.h"
+#include "constants.h"
 #include <iostream>
 
 const std::string Copper::name = "Copper";
@@ -39,9 +40,9 @@ void Copper::draw(Uint32 *pixels)
 //        pixels[0] += 0x00E89149*yield/768.0;
 //	Copper ore 0x0EAD88;
 
-	int most = 0x0E * yield/128.0;
-	int mid = 0xAD * yield/128.0;
-	int least = 0x88 * yield/128.0;
+	const unsigned char most = (Colours::Copper>>16 & 0xFF) * yield/128.0;
+	const unsigned char mid = (Colours::Copper>>8 & 0xFF) * yield/128.0;
+	const unsigned char least = (Colours::Copper & 0xFF) * yield/128.0;
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){

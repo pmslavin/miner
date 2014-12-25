@@ -2,6 +2,7 @@
 #include "Mineral.h"
 #include "Ground.h"
 #include "RoboMiner.h"
+#include "constants.h"
 #include <iostream>
 #include <algorithm>
 
@@ -12,7 +13,7 @@ Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
 						    y(y),
 						    ground(g),
 						    miner(nullptr),
-						    visible(false),
+						    visible(true),
 						    drilled(false)
 {
 
@@ -127,7 +128,8 @@ void Cell::drawDrilled(Uint32 *pixels)
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[r*w+c] = (r+c) % 2 ? 0x006A6A6A : 0x00818582;
+			pixels[r*w+c] = (r+c) % 2 ?
+					Colours::Cell::Drilled::Dark : Colours::Cell::Drilled::Light;
 //			pixels[r*w+c] = 0x008C918E;
 //			pixels[r*w+c] = 0x009DA39F;
 		}
@@ -143,11 +145,9 @@ void Cell::drawBlank(Uint32 *pixels)
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[r*w+c] = 0x00000000;
+			pixels[r*w+c] = Colours::Black;
 		}
 	}
-
-
 }
 
 
@@ -157,19 +157,20 @@ void Cell::drawDepthShade(Uint32 *pixels)
 	const int grw = ground->getWidth();
 	const int cell_w = getWidth();
 	const int cell_h = getHeight();
-	int depth = getY()*cell_h*2;
+	int depth = getY()*cell_h;
 
 	depth = depth>grh ? grh : depth;
 
-	const int most = 0x22;
+/*	const int most = 0x22;
 	const int mid = 0x0F;
 	const int least = 0x00;
+*/
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[r*grw+c] = (0x00<<24) + (most*(grh-depth-r)/grh << 16)
-						     + (mid*(grh-depth-r)/grh  << 8)
-						     + least;
+			pixels[r*grw+c] = (0x00<<24) + (Colours::Cell::Empty::most*(grh-depth-r)/grh << 16)
+						     + (Colours::Cell::Empty::mid*(grh-depth-r)/grh  << 8)
+						     + Colours::Cell::Empty::least;
 		}
 	}
 }

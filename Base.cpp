@@ -8,13 +8,15 @@ Base::Base(int w, int h, int y, int x, Surface *s) : width(w),
 						     y(y), x(x),
 						     surface(s)
 {
-	
+	mine = SDL_LoadBMP("mine1.bmp");	
+	SDL_SetColorKey(mine, SDL_TRUE, 0x00);
 }
 
 
 Base::~Base()
 {
-
+	surface = nullptr;
+	SDL_FreeSurface(mine);
 }
 
 
@@ -81,9 +83,9 @@ int Base::getHeight() const
 }
 
 
-void Base::draw(uint32_t *pixels)
+void Base::draw(SDL_Surface *destsurf)
 {
-	for(int r=0; r<height; ++r){
+/*	for(int r=0; r<height; ++r){
 		for(int c=0; c<width; ++c){
 			pixels[r*surface->getWidth()+c] = 0x00606060;
 		}
@@ -96,4 +98,8 @@ void Base::draw(uint32_t *pixels)
 			}
 		}
 	}
+*/
+	SDL_Rect dest = {destsurf->w/2-mine->w/2+2, destsurf->h-mine->h-6, mine->w, mine->h};
+	SDL_BlitSurface(mine, nullptr, destsurf, &dest);
+
 }

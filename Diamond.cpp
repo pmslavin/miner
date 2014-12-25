@@ -49,9 +49,9 @@ void Diamond::draw(Uint32 *pixels)
 	mid = (mid < 0xD0) ? 0xD0 : mid;
 	least = (least < 0xD0) ? 0xD0 : least;
 */
-	int most = 0xF0;
-	int mid = 0xF0;
-	int least = 0xF0;
+	const unsigned char most = 0xF0;
+	const unsigned char mid = 0xF0;
+	const unsigned char least = 0xF0;
 
 /*	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
