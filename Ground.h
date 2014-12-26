@@ -5,6 +5,7 @@
 #include "Cell.h"
 
 class Frame;
+struct SDL_Surface;
 
 
 class Ground
@@ -29,6 +30,7 @@ protected:
 	int cell_cols;
 	int cell_rows;
 	Uint32 *pixels;
+	SDL_Surface *surf;
 };
 
 #endif

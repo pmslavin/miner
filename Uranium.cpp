@@ -29,7 +29,7 @@ const std::string Uranium::getSymbol() const
 }
 
 
-void Uranium::draw(Uint32 *pixels)
+void Uranium::draw(Uint32 *pixels, int fog)
 {
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
@@ -40,10 +40,14 @@ void Uranium::draw(Uint32 *pixels)
 	const unsigned char least = 0x00;
 
 	mid = (mid < 0xA7) ? 0xA7 : mid;
+	mid /= fog;
+
+	const uint32_t cbytes = (0x00 << 24) + (most << 16) + (mid << 8) + least;
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
+			pixels[r*w+c] = cbytes;
+//			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 		}
 	}
 }

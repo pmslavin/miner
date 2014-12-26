@@ -10,7 +10,7 @@ public:
 	~Iron();
 	const std::string getName() const;
 	const std::string getSymbol() const;
-	void draw(Uint32 *pixels);
+	void draw(Uint32 *pixels, int fog);
 	Iron *extract(int quant);
 protected:
 	static const std::string name;

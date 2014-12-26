@@ -30,7 +30,7 @@ const std::string Iron::getSymbol() const
 }
 
 
-void Iron::draw(Uint32 *pixels)
+void Iron::draw(Uint32 *pixels, int fog)
 {
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
@@ -39,13 +39,16 @@ void Iron::draw(Uint32 *pixels)
 //	pixels[0] += (0x00 << 24) + (yield << 16);
 //	Iron ore 0x00E04714
 
-	const unsigned char most = (Colours::Iron>>16 & 0xFF) * yield/180.0;
-	const unsigned char mid = (Colours::Iron>>8 & 0xFF) * yield/180.0;
-	const unsigned char least = (Colours::Iron & 0xFF) * yield/180.0;
+	const unsigned char most = (Colours::Iron>>16 & 0xFF) * yield/180.0/fog;
+	const unsigned char mid = (Colours::Iron>>8 & 0xFF) * yield/180.0/fog;
+	const unsigned char least = (Colours::Iron & 0xFF) * yield/180.0/fog;
+
+	const uint32_t cbytes = (0x00 << 24) + (most << 16) + (mid << 8) + least;
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
+			pixels[r*w+c] += cbytes;
+//			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 		}
 	}
 

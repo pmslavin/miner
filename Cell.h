@@ -45,7 +45,7 @@ protected:
 	bool visible;
 	bool drilled;
 	void drawDrilled(Uint32 *pixels);
-	void drawDepthShade(Uint32 *pixels);
+	void drawDepthShade(Uint32 *pixels, int fog);
 	void drawBlank(Uint32 *pixels);
 };
 

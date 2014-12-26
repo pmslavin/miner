@@ -13,7 +13,7 @@ Diamond::Diamond(int yield) : Mineral(yield)
 
 Diamond::~Diamond()
 {
-//	std::cout << "Destructing " << name << " then... ";
+
 }
 
 
@@ -29,7 +29,7 @@ const std::string Diamond::getSymbol() const
 }
 
 
-void Diamond::draw(Uint32 *pixels)
+void Diamond::draw(Uint32 *pixels, int fog)
 {
 //	int cell_w = parent->getWidth();
 //	int cell_h = parent->getHeight();
@@ -41,37 +41,22 @@ void Diamond::draw(Uint32 *pixels)
 //	0111
 //	0100
 
-/*	int most = 0xF0 * yield/256.0;
-	int mid = 0xF0 * yield/256.0;
-	int least = 0xF0 * yield/256.0;
+	const unsigned char most = 0xF0 / fog;
+	const unsigned char mid = 0xF0 / fog;
+	const unsigned char least = 0xF0 / fog;
+	const uint32_t cbytes = (0x00 << 24) + (most << 16) + (mid << 8) + least;
 
-	most = (most < 0xD0) ? 0xD0 : most;
-	mid = (mid < 0xD0) ? 0xD0 : mid;
-	least = (least < 0xD0) ? 0xD0 : least;
-*/
-	const unsigned char most = 0xF0;
-	const unsigned char mid = 0xF0;
-	const unsigned char least = 0xF0;
+	pixels[2] = cbytes;
 
-/*	for(int r=0; r<cell_h; ++r){
-		for(int c=0; c<cell_w; ++c){
-			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
-		}
-	}
-*/
+	pixels[0+1*w] = cbytes;
+	pixels[1+1*w] = cbytes;
+	pixels[2+1*w] = cbytes;
 
-	pixels[2] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
+	pixels[1+2*w] = cbytes;
+	pixels[2+2*w] = cbytes;
+	pixels[3+2*w] = cbytes;
 
-	pixels[0+1*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-	pixels[1+1*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-	pixels[2+1*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-
-	pixels[1+2*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-	pixels[2+2*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-	pixels[3+2*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-
-	pixels[1+3*w] = (0x00 << 24) + (most << 16) + (mid << 8) + least;
-
+	pixels[1+3*w] = cbytes;
 }
 
 

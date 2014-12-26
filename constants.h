@@ -9,14 +9,15 @@ namespace Colours{
 	const uint32_t Gold	= 0x00F0D000;
 
 	namespace Cell{
+
+		namespace Empty{
+			const uint32_t Light = 0x00825A00;
+			const uint32_t Dark = 0x005C4000;
+//			const uint32_t Dark  = 0x00220F00;
+		};
 		namespace Drilled{
 			const uint32_t Light = 0x00818582;
-			const uint32_t Dark = 0x006A6A6A;
-		};
-		namespace Empty{
-			const unsigned char most = 0x22;
-			const unsigned char mid = 0x0F;
-			const unsigned char least = 0x00;
+			const uint32_t Dark  = 0x006A6A6A;
 		};
 	};
 

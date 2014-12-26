@@ -14,7 +14,7 @@ Copper::Copper(int yield) : Mineral(yield)
 
 Copper::~Copper()
 {
-//	std::cout << "Destructing " << name << " then... ";
+
 }
 
 
@@ -30,23 +30,22 @@ const std::string Copper::getSymbol() const
 }
 
 
-void Copper::draw(Uint32 *pixels)
+void Copper::draw(Uint32 *pixels, int fog)
 {
-	int cell_w = parent->getWidth();
-	int cell_h = parent->getHeight();
-	int w = parent->getGround()->getWidth();
+	const int cell_w = parent->getWidth();
+	const int cell_h = parent->getHeight();
+	const int w = parent->getGround()->getWidth();
 
-//        pixels[y*w+x] = 0x00E89149;
-//        pixels[0] += 0x00E89149*yield/768.0;
-//	Copper ore 0x0EAD88;
+	const unsigned char most = (Colours::Copper>>16 & 0xFF) * yield/128.0 / fog;
+	const unsigned char mid = (Colours::Copper>>8 & 0xFF) * yield/128.0 / fog;
+	const unsigned char least = (Colours::Copper & 0xFF) * yield/128.0 / fog;
 
-	const unsigned char most = (Colours::Copper>>16 & 0xFF) * yield/128.0;
-	const unsigned char mid = (Colours::Copper>>8 & 0xFF) * yield/128.0;
-	const unsigned char least = (Colours::Copper & 0xFF) * yield/128.0;
+	const uint32_t cbytes = (0x00 << 24) + (most << 16) + (mid << 8) + least;
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
-			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
+			pixels[r*w+c] = cbytes;
+//			pixels[c+r*w] += (0x00 << 24) + (most << 16) + (mid << 8) + least;
 		}
 	}
 

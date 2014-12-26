@@ -10,11 +10,12 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 //	pixels = new Uint32[w*h];
 	base = new Base(24, 20, 0, 128, this);
 	tree = SDL_LoadBMP("trees1.bmp");
-	store = SDL_LoadBMP("store1.bmp");
+	silo = SDL_LoadBMP("silo1.bmp");
 	surf = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 	pixels = static_cast<Uint32 *>(surf->pixels);
 
 	SDL_SetColorKey(tree, SDL_TRUE, 0x00);
+	SDL_SetColorKey(silo, SDL_TRUE, 0x00);
 }
 
 
@@ -24,6 +25,7 @@ Surface::~Surface()
 	delete base;
 	pixels = nullptr;
 	SDL_FreeSurface(tree);
+	SDL_FreeSurface(silo);
 	SDL_FreeSurface(surf);
 }
 
@@ -69,12 +71,12 @@ void Surface::draw()
 	SDL_BlitSurface(tree, nullptr, surf, &tz);
 	tz.x = 40;
 	SDL_BlitSurface(tree, nullptr, surf, &tz);
-	SDL_Rect sz = {216, height-store->h-soil_height, store->w, store->h};
-	SDL_BlitSurface(store, nullptr, surf, &sz);
-	sz.x += store->w + 16;
-	SDL_BlitSurface(store, nullptr, surf, &sz);
-	sz.x += store->w + 16;
-	SDL_BlitSurface(store, nullptr, surf, &sz);
+	SDL_Rect sz = {216, height-silo->h-soil_height, silo->w, silo->h};
+	SDL_BlitSurface(silo, nullptr, surf, &sz);
+	sz.x += silo->w + 16;
+	SDL_BlitSurface(silo, nullptr, surf, &sz);
+	sz.x += silo->w + 16;
+	SDL_BlitSurface(silo, nullptr, surf, &sz);
 }
 
 

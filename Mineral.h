@@ -20,7 +20,7 @@ public:
 //	virtual Mineral& operator+(const Mineral& rhs) = 0;
 	void setParent(Cell *parent);
 	Cell *getParent() const;
-	virtual void draw(Uint32 *pixels) = 0;
+	virtual void draw(Uint32 *pixels, int fog) = 0;
 	virtual Mineral *extract(int quant) = 0;
 protected:
 	static const std::string name;

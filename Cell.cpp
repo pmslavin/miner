@@ -13,7 +13,7 @@ Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
 						    y(y),
 						    ground(g),
 						    miner(nullptr),
-						    visible(true),
+						    visible(false),
 						    drilled(false)
 {
 
@@ -70,9 +70,6 @@ void Cell::addMineral(Mineral *m)
 
 void Cell::clearMinerals()
 {
-//	for(auto iter=minerals.begin(); iter != minerals.end(); ++iter){
-//		(*iter)->setParent(nullptr);
-//	}
 	for(auto& m: minerals){
 		m->setParent(nullptr);
 		delete m;
@@ -102,18 +99,20 @@ std::ostream& operator<<(std::ostream& ostr, Cell& c)
 
 void Cell::drawMinerals(Uint32 *pixels)
 {
+	int fog = 1;
+
 	if(!isVisible())
-		return;
+		fog = 4;
 	
 	if(!minerals.empty())
 		drawBlank(pixels);
 	else if(!isDrilled())
-		drawDepthShade(pixels);	
+		drawDepthShade(pixels, fog);	
 	else if(isDrilled())
 		drawDrilled(pixels);
 
 	for(auto& m: minerals)
-		m->draw(pixels);
+		m->draw(pixels, fog);
 
 	if(miner)
 		miner->draw(pixels);
@@ -122,16 +121,14 @@ void Cell::drawMinerals(Uint32 *pixels)
 
 void Cell::drawDrilled(Uint32 *pixels)
 {
-	int w = ground->getWidth();
-	int cell_w = getWidth();
-	int cell_h = getHeight();
+	const int w = ground->getWidth();
+	const int cell_w = getWidth();
+	const int cell_h = getHeight();
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
 			pixels[r*w+c] = (r+c) % 2 ?
 					Colours::Cell::Drilled::Dark : Colours::Cell::Drilled::Light;
-//			pixels[r*w+c] = 0x008C918E;
-//			pixels[r*w+c] = 0x009DA39F;
 		}
 	}
 }
@@ -140,8 +137,8 @@ void Cell::drawDrilled(Uint32 *pixels)
 void Cell::drawBlank(Uint32 *pixels)
 {
 	const int w = ground->getWidth();
-	int cell_w = getWidth();
-	int cell_h = getHeight();
+	const int cell_w = getWidth();
+	const int cell_h = getHeight();
 
 	for(int r=0; r<cell_h; ++r){
 		for(int c=0; c<cell_w; ++c){
@@ -151,26 +148,31 @@ void Cell::drawBlank(Uint32 *pixels)
 }
 
 
-void Cell::drawDepthShade(Uint32 *pixels)
+void Cell::drawDepthShade(Uint32 *pixels, int fog)
 {
 	const int grh = ground->getHeight();
 	const int grw = ground->getWidth();
 	const int cell_w = getWidth();
 	const int cell_h = getHeight();
 	int depth = getY()*cell_h;
-
 	depth = depth>grh ? grh : depth;
 
-/*	const int most = 0x22;
-	const int mid = 0x0F;
-	const int least = 0x00;
-*/
+	unsigned char most_d = (Colours::Cell::Empty::Dark>>16 & 0xFF)/fog;
+	unsigned char mid_d = (Colours::Cell::Empty::Dark>>8 & 0xFF)/fog;
+	unsigned char least_d = (Colours::Cell::Empty::Dark & 0xFF)/fog;
 
-	for(int r=0; r<cell_h; ++r){
+	unsigned char most_l = (Colours::Cell::Empty::Light>>16 & 0xFF)/fog;
+	unsigned char mid_l = (Colours::Cell::Empty::Light>>8 & 0xFF)/fog;
+	unsigned char least_l = (Colours::Cell::Empty::Light & 0xFF)/fog;
+
+	for(int r=0; r<cell_h; r+=2){
 		for(int c=0; c<cell_w; ++c){
-			pixels[r*grw+c] = (0x00<<24) + (Colours::Cell::Empty::most*(grh-depth-r)/grh << 16)
-						     + (Colours::Cell::Empty::mid*(grh-depth-r)/grh  << 8)
-						     + Colours::Cell::Empty::least;
+//			pixels[r*grw+c] = (0x00<<24) + (most_d*(grh-depth-r)/grh << 16)
+//						     + (mid_d*(grh-depth-r)/grh  << 8)
+//						     + least_d;
+			pixels[(r+1)*grw+c] = (0x00<<24) + (most_l*(grh-depth-r)/grh << 16)
+						         + (mid_l*(grh-depth-r)/grh  << 8)
+	 					         + least_l;
 		}
 	}
 }

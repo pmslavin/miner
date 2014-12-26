@@ -5,6 +5,7 @@
 #include "Diamond.h"
 #include "Uranium.h"
 #include <iostream>
+#include "SDL2/SDL.h"
 
 
 Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
@@ -16,7 +17,9 @@ Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
 		cells.push_back(Cell(4, 4, i%cell_cols, i/cell_cols, this));
 	}
 
-	pixels = new Uint32[width*height];
+	surf = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+	pixels = static_cast<Uint32 *>(surf->pixels);
+//	pixels = new Uint32[width*height];
 	memset(pixels, 0, width*height*sizeof(Uint32));
 
 /*	int most = 0x2E;
@@ -55,7 +58,6 @@ void Ground::calcMinerals()
 	for(auto& c: cells){
 		if(rand() % 36 == 0)
 			c.addMineral(new Iron(rand() % 180 + 1));
-//			c.addMineral(new Iron(5));
 
 		if(rand() % 64 == 7 && c.getY() > cell_rows/6)
 			c.addMineral(new Copper(rand() % 128 + 1));
@@ -105,22 +107,9 @@ void Ground::clearCells()
 
 void Ground::draw()
 {
-	
-//	memset(pixels, 0, width*height*sizeof(Uint32));
-/*	int most = 0x2E;
-	int mid = 0x13;
-	int least = 0x00;
-
-	for(int r=0; r<height; ++r){
-		for(int c=0; c<width; ++c){
-			pixels[r*width+c] = (0x00<<24)  + (most*(height-r)/height << 16)
-							+ (mid*(height-r)/height << 8)
-							+ least*(height-r)/height;
-		}
-	}
-*/
 	for(auto& c: cells)
 		c.drawMinerals(&pixels[width*c.getY()*c.getHeight()+c.getX()*c.getWidth()]);
+	
 }
 
 

@@ -26,7 +26,7 @@ protected:
 	Base *base;
 	SDL_Surface *surf;
 	SDL_Surface *tree;
-	SDL_Surface *store;
+	SDL_Surface *silo;
 };
 
 #endif

@@ -10,7 +10,7 @@ public:
 	~Uranium();
 	const std::string getName() const;
 	const std::string getSymbol() const;
-	void draw(Uint32 *pixels);
+	void draw(Uint32 *pixels, int fog);
 	Uranium *extract(int quant);
 protected:
 	static const std::string name;

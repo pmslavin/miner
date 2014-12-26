@@ -21,6 +21,7 @@ Frame::Frame(int w, int h) : width(w), height(h)
 
 	lower = {0, surface_height, w, h};
 	upper = {0, 0, w, surface_height};
+	surface->draw();
 
 	srand(1977);
 }
@@ -35,18 +36,11 @@ Frame::~Frame()
 
 void Frame::draw(SDL_Texture *texture)
 {
-	surface->draw();
+//	surface->draw();
 	ground->draw();
 
 	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
 	SDL_UpdateTexture(texture, &lower, ground->getPixels(), width*sizeof(Uint32));
-
-/*	SDL_Surface *tree = SDL_LoadBMP("tree.bmp");
-	SDL_Rect tree_zone = {width-120, 4, tree->w, tree->h};
-	int ret = SDL_UpdateTexture(texture, &tree_zone, tree->pixels, tree->pitch);
-	std::cout << "SDL_UpdateTexture -> " << ret << " : "
-		  << SDL_GetError() << std::endl;
-*/
 }
 
 
