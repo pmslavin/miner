@@ -25,7 +25,8 @@ protected:
 	Uint32 *pixels;
 	Base *base;
 	SDL_Surface *surf;
-	SDL_Surface *tree;
+	SDL_Surface *trees1;
+	SDL_Surface *trees2;
 	SDL_Surface *silo;
 };
 

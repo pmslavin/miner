@@ -1,5 +1,6 @@
 #include "Uranium.h"
 #include "Ground.h"
+#include "constants.h"
 #include <iostream>
 
 const std::string Uranium::name = "Uranium";
@@ -31,15 +32,15 @@ const std::string Uranium::getSymbol() const
 
 void Uranium::draw(Uint32 *pixels, int fog)
 {
-	int cell_w = parent->getWidth();
-	int cell_h = parent->getHeight();
-	int w = parent->getGround()->getWidth();
+	const int cell_w = parent->getWidth();
+	const int cell_h = parent->getHeight();
+	const int w = parent->getGround()->getWidth();
 
-	const unsigned char most = 0x00;
-	unsigned char mid = 0xFF * yield/76.0;
-	const unsigned char least = 0x00;
+	const unsigned char most = Colours::Uranium >> 16 & 0xFF;
+	unsigned char mid = (Colours::Uranium >> 8 & 0xFF) * yield/76.0;
+	const unsigned char least = Colours::Uranium & 0xFF;
 
-	mid = (mid < 0xA7) ? 0xA7 : mid;
+	mid = (mid < Colours::Uranium_Dark_byte) ? Colours::Uranium_Dark_byte : mid;
 	mid /= fog;
 
 	const uint32_t cbytes = (0x00 << 24) + (most << 16) + (mid << 8) + least;

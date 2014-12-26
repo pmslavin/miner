@@ -68,8 +68,8 @@ int main()
 	RoboMiner *rm = frame.getMiner();
 
 	bool active = true;
-	bool paused = false;
-	unsigned int delay = 100;
+	bool paused = true;
+	unsigned int delay = 200;
 
 	while(active){
 //		SDL_UpdateTexture(texture, &upper, s.getPixels(), w*sizeof(Uint32));

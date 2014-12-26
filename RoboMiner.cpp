@@ -18,7 +18,7 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 {
 //	pixels = new uint32_t[4*4];
 	setCell(frame->getGround()->getCell(cy, cx));
-	setDestination(160, 128);
+//	setDestination(160, 128);
 	setBase(frame->getSurface()->getBase());
 }
 

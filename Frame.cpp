@@ -36,6 +36,7 @@ Frame::~Frame()
 
 void Frame::draw(SDL_Texture *texture)
 {
+// Surface is immobile at present...
 //	surface->draw();
 	ground->draw();
 

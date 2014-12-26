@@ -6,6 +6,7 @@
 [6]  List of known mineral locations.
 [7]  Prioritise Minerals by type.
 [8]  Cell colour according to depth.								DONE
-[9]  Pause (p), inc/dec speed (</>)								DONE
-[10] Text info Panel
-[11] Fog for invisible cells - user visible but faded.
+[9]  Pause (p), inc/dec speed (</>).								DONE
+[10] Text info Panel.
+[11] Fog for invisible cells - user visible but faded.						DONE
+[12] Mouseover cells.

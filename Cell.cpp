@@ -157,20 +157,20 @@ void Cell::drawDepthShade(Uint32 *pixels, int fog)
 	int depth = getY()*cell_h;
 	depth = depth>grh ? grh : depth;
 
-	unsigned char most_d = (Colours::Cell::Empty::Dark>>16 & 0xFF)/fog;
-	unsigned char mid_d = (Colours::Cell::Empty::Dark>>8 & 0xFF)/fog;
-	unsigned char least_d = (Colours::Cell::Empty::Dark & 0xFF)/fog;
-
-	unsigned char most_l = (Colours::Cell::Empty::Light>>16 & 0xFF)/fog;
-	unsigned char mid_l = (Colours::Cell::Empty::Light>>8 & 0xFF)/fog;
-	unsigned char least_l = (Colours::Cell::Empty::Light & 0xFF)/fog;
+/*	unsigned const char most_d = (Colours::Cell::Empty::Dark>>16 & 0xFF)/fog;
+	unsigned const char mid_d = (Colours::Cell::Empty::Dark>>8 & 0xFF)/fog;
+	unsigned const char least_d = (Colours::Cell::Empty::Dark & 0xFF)/fog;
+*/
+	unsigned const char most_l = (Colours::Cell::Empty::Light>>16 & 0xFF)/fog;
+	unsigned const char mid_l = (Colours::Cell::Empty::Light>>8 & 0xFF)/fog;
+	unsigned const char least_l = (Colours::Cell::Empty::Light & 0xFF)/fog;
 
 	for(int r=0; r<cell_h; r+=2){
 		for(int c=0; c<cell_w; ++c){
-//			pixels[r*grw+c] = (0x00<<24) + (most_d*(grh-depth-r)/grh << 16)
-//						     + (mid_d*(grh-depth-r)/grh  << 8)
-//						     + least_d;
-			pixels[(r+1)*grw+c] = (0x00<<24) + (most_l*(grh-depth-r)/grh << 16)
+/*			pixels[r*grw+c] = (0x00<<24) + (most_d*(grh-depth-r)/grh << 16)
+						     + (mid_d*(grh-depth-r)/grh  << 8)
+						     + least_d;
+*/			pixels[(r+1)*grw+c] = (0x00<<24) + (most_l*(grh-depth-r)/grh << 16)
 						         + (mid_l*(grh-depth-r)/grh  << 8)
 	 					         + least_l;
 		}
