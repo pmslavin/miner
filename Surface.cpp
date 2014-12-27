@@ -1,6 +1,8 @@
 #include "Surface.h"
 #include "Base.h"
 #include "constants.h"
+#include "resources.h"
+
 #include <cstring>
 
 
@@ -11,9 +13,16 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 //	pixels = new Uint32[w*h];
 	base = new Base(24, 20, 0, 128, this);
 	
-	trees1 = SDL_LoadBMP("trees1.bmp");
+/*	trees1 = SDL_LoadBMP("trees1.bmp");
 	trees2 = SDL_LoadBMP("trees2.bmp");
 	silo = SDL_LoadBMP("silo1.bmp");
+*/
+	SDL_RWops *t1_rwo = SDL_RWFromConstMem(static_cast<const void *>(trees1_bmp), trees1_bmp_len);
+	SDL_RWops *t2_rwo = SDL_RWFromConstMem(static_cast<const void *>(trees2_bmp), trees2_bmp_len);
+	SDL_RWops *silo1_rwo = SDL_RWFromConstMem(static_cast<const void *>(silo1_bmp), silo1_bmp_len);
+	trees1 = SDL_LoadBMP_RW(t1_rwo, 1);
+	trees2 = SDL_LoadBMP_RW(t2_rwo, 1);
+	silo = SDL_LoadBMP_RW(silo1_rwo, 1);
 
 	surf = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 	pixels = static_cast<Uint32 *>(surf->pixels);

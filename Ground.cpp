@@ -4,7 +4,11 @@
 #include "Gold.h"
 #include "Diamond.h"
 #include "Uranium.h"
+
+#include <stdexcept>
 #include <iostream>
+#include <sstream>
+
 #include "SDL2/SDL.h"
 
 
@@ -34,9 +38,11 @@ Ground::~Ground()
 Cell& Ground::getCell(int y, int x)
 {
 	if((x < 0 || x >= cell_cols) || (y < 0 || y >= cell_rows)){
-		std::cerr << "G->getCell() error: (" << y << ","
-			  << x << ")" << std::endl;
-		throw std::exception();
+		std::ostringstream ess;
+		ess << "G->getCell() error: (" << y << ","
+			  << x << ")";
+		
+		throw std::invalid_argument(ess.str());
 	}
 	return cells[y*cell_cols + x]; 
 }

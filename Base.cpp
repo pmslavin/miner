@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Mineral.h"
 #include "Surface.h"
+#include "resources.h"
 
 
 Base::Base(int w, int h, int y, int x, Surface *s) : width(w),
@@ -8,7 +9,9 @@ Base::Base(int w, int h, int y, int x, Surface *s) : width(w),
 						     y(y), x(x),
 						     surface(s)
 {
-	mine = SDL_LoadBMP("mine1.bmp");	
+//	mine = SDL_LoadBMP("mine1.bmp");	
+	SDL_RWops* mine_bmp_rwo = SDL_RWFromConstMem(static_cast<const void *>(mine1_bmp), mine1_bmp_len);
+	mine = SDL_LoadBMP_RW(mine_bmp_rwo, 1);
 	SDL_SetColorKey(mine, SDL_TRUE, 0x00);
 }
 
