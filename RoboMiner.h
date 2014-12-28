@@ -8,6 +8,12 @@ class Frame;
 class Mineral;
 class Base;
 
+typedef enum{	DRILLING,
+		MINING,
+		EXPLORING,
+		IDLE
+}state_t;
+
 class RoboMiner
 {
 public:
@@ -16,7 +22,7 @@ public:
 	void draw(uint32_t *pixels);
 	int getX() const;
 	int getY() const;
-	void setCell(Cell& c);
+	void setCell(Cell *c);
 	int drill(int cy, int cx);
 	void move(int cy, int cx);
 	void action();
@@ -30,20 +36,20 @@ protected:
 	int cell_y;
 	int cell_x;
 	Frame *frame;
-	Cell *cell;
+	Base *base;
+	Cell *cell, *destCell, *lastMinedOre, *drillCell;
 	std::vector<Mineral *> cargo;
 	int energy;
+	int max_cargo;
+	bool exploring;
+	int drillCount;
+	state_t state;
+	void emptyCargo();
+	void setLastMinedOre(int cy, int cx);
 	void mine();
 	void process(std::vector<Mineral *>& ores);
 	void setDestination(int cy, int cx);
-	Cell *destCell;
 	void navigate();
-	int max_cargo;
-	void emptyCargo();
-	void setLastMinedOre(int cy, int cx);
-	Cell *lastMinedOre;
-	Base *base;
-	bool exploring;
 };
 
 #endif

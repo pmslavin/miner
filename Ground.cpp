@@ -39,10 +39,9 @@ Cell& Ground::getCell(int y, int x)
 {
 	if((x < 0 || x >= cell_cols) || (y < 0 || y >= cell_rows)){
 		std::ostringstream ess;
-		ess << "G->getCell() error: (" << y << ","
+		ess << "Invalid Cell: getCell(" << y << ","
 			  << x << ")";
-		
-		throw std::invalid_argument(ess.str());
+		throw std::out_of_range(ess.str());
 	}
 	return cells[y*cell_cols + x]; 
 }

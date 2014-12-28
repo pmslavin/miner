@@ -31,6 +31,7 @@ public:
 	void setVisible(bool isvis);
 	bool isVisible() const;
 	void setDrilled(bool isdrilled);
+	void setDrilling(bool isdrilling);
 	bool isDrilled() const;
 	std::vector<Mineral *> *extract(int quant);
 	int distanceFrom(const Cell& c) const;
@@ -42,9 +43,9 @@ protected:
 	Ground *ground;
 	std::vector<Mineral *> minerals;
 	RoboMiner *miner;
-	bool visible;
-	bool drilled;
+	bool visible, drilling, drilled;
 	void drawDrilled(Uint32 *pixels);
+	void drawDrillProgress(Uint32 *pixels);
 	void drawDepthShade(Uint32 *pixels, int fog);
 	void drawBlank(Uint32 *pixels);
 };

@@ -14,6 +14,7 @@ Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),
 						    ground(g),
 						    miner(nullptr),
 						    visible(false),
+						    drilling(false),
 						    drilled(false)
 {
 
@@ -106,6 +107,8 @@ void Cell::drawMinerals(Uint32 *pixels)
 	
 	if(!minerals.empty())
 		drawBlank(pixels);
+	else if(drilling)
+		drawDrillProgress(pixels);
 	else if(!isDrilled())
 		drawDepthShade(pixels, fog);	
 	else if(isDrilled())
@@ -129,6 +132,21 @@ void Cell::drawDrilled(Uint32 *pixels)
 		for(int c=0; c<cell_w; ++c){
 			pixels[r*w+c] = (r+c) % 2 ?
 					Colours::Cell::Drilled::Dark : Colours::Cell::Drilled::Light;
+		}
+	}
+}
+
+
+void Cell::drawDrillProgress(Uint32 *pixels)
+{
+	const int w = ground->getWidth();
+	const int cell_w = getWidth();
+	const int cell_h = getHeight();
+
+	for(int r=0; r<cell_h; ++r){
+		for(int c=0; c<cell_w; ++c){
+			pixels[r*w+c] = (r+c) % 2 ?
+					Colours::Cell::Drilled::Dark : Colours::Yellow;
 		}
 	}
 }
@@ -202,9 +220,15 @@ bool Cell::isVisible() const
 }
 
 
+void Cell::setDrilling(bool isdrilling)
+{
+	drilling = isdrilling;
+}
+
 void Cell::setDrilled(bool isdrilled)
 {
 	drilled = isdrilled;
+	drilling = false;
 	setVisible(true);
 }
 

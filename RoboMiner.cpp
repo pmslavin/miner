@@ -1,31 +1,35 @@
-#include <iostream>
 #include "Frame.h"
 #include "RoboMiner.h"
 #include "Mineral.h"
 #include "Base.h"
 
+#include <iostream>
 
 
 RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  cell_x(cx),
 						  frame(fr),
-						  energy(1000),
 						  destCell(nullptr),
-						  max_cargo(1000),
 						  lastMinedOre(nullptr),
-						  base(nullptr),
-						  exploring(false)
+						  drillCell(nullptr),
+						  energy(1000),
+						  max_cargo(1000),
+						  exploring(false),
+						  drillCount(0),
+						  state(IDLE)
 {
-//	pixels = new uint32_t[4*4];
-	setCell(frame->getGround()->getCell(cy, cx));
+	Cell *startCell = &(frame->getGround()->getCell(cy, cx));
+	setCell(startCell);
+	startCell->setDrilled(true);
+	startCell->hasMiner(this);
+//	setCell(frame->getGround()->getCell(cy, cx));
 //	setDestination(160, 128);
-	setBase(frame->getSurface()->getBase());
+	setBase(frame->getSurface()->getBase()); 
 }
 
 
 RoboMiner::~RoboMiner()
 {
-//	delete pixels;
 }
 
 
@@ -74,9 +78,9 @@ int RoboMiner::getY() const
 }
 
 
-void RoboMiner::setCell(Cell& c)
+void RoboMiner::setCell(Cell *c)
 {
-	cell = &c;
+	cell = c;
 }
 
 
@@ -99,22 +103,42 @@ void RoboMiner::move(int cy, int cx)
 		  <<  maxCell_y << " max_x: " << maxCell_x << std::endl;
 */
 	Cell *destcell = &(gr->getCell(cy, cx));
-	cell->clearMiner();
 	if(!destcell->isDrilled())
 		drill(cy, cx);
-	cell = destcell;
-	cell->hasMiner(this);
-	cell_y = cy;
-	cell_x = cx;
+
+	if(destcell->isDrilled()){
+		cell->clearMiner();
+		cell = destcell;
+		cell->hasMiner(this);
+		cell_y = cy;
+		cell_x = cx;
+	}
 }
 
 
 int RoboMiner::drill(int cy, int cx)
 {
-	Cell &c = frame->getGround()->getCell(cy, cx);
-	c.setDrilled(true);
+	if(!drillCount){
+		state = DRILLING;
+		drillCell = &(frame->getGround()->getCell(cy, cx));
+		drillCell->setDrilling(true);
+		drillCount = 5;
+		std::cout << "Drilling (" << cy << "," << cx << ") "
+			  << std::flush;
+		return drillCount;
+	}else{
+		std::cout << drillCount << "... " << std::flush;
+		--drillCount;
+	}
 
-	return 0;
+	if(!drillCount){
+		std::cout << std::endl;
+		drillCell->setDrilled(true);
+		drillCell = nullptr;
+		state = IDLE;
+	}
+
+	return drillCount;
 }
 
 
@@ -123,11 +147,19 @@ void RoboMiner::action()
 
 //	if(rand() % 512 < 48)
 //		scan();
+
+	if(state == DRILLING){
+		drill(drillCell->getY(), drillCell->getX());
+		return;
+	}
+
+	if(cell->mineralCount() > 0 && !isFull()){
+		mine();
+		return;
+	}
+
 	if(!destCell || exploring)
 		scan();
-
-	while(cell->mineralCount() > 0 && !isFull())
-		mine();
 
 	if(destCell){
 		navigate();
@@ -158,7 +190,6 @@ void RoboMiner::mine()
 		return;
 
 	int extract_quant = 5;
-
 	int remain = getRemainingSpace();
 
 	if(remain < extract_quant)
@@ -166,7 +197,7 @@ void RoboMiner::mine()
 
 	std::vector<Mineral *> *output = cell->extract(extract_quant);
 
-/*	std::cout << "Mining (" << cell_y << "," << cell_x
+	std::cout << "Mining (" << cell_y << "," << cell_x
 		  << ") yields:" << std::endl;
 
 	int idx = 1;
@@ -175,7 +206,7 @@ void RoboMiner::mine()
 			  << m->getYield() << " units of "
 			  << m->getName() << std::endl;
 	}
-*/
+
 	process(*output);
 	delete output;
 }
@@ -390,7 +421,7 @@ void RoboMiner::listCargo() const
 
 void RoboMiner::scan()
 {
-	int radius = 8;
+	int radius = 6;
 	int up_radius = radius, down_radius = radius;
 	int left_radius = radius, right_radius = radius;
 	int xdist, ydist;

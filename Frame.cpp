@@ -15,10 +15,10 @@ Frame::Frame(int w, int h) : width(w), height(h)
 
 	miner = new RoboMiner(0, gr_cols/2, this);
 
-	Cell& rmcell = ground->getCell(0, gr_cols/2);
+/*	Cell& rmcell = ground->getCell(0, gr_cols/2);
 	rmcell.hasMiner(miner);
 	rmcell.setDrilled(true);
-
+*/
 	lower = {0, surface_height, w, h};
 	upper = {0, 0, w, surface_height};
 	surface->draw();
