@@ -22,6 +22,7 @@ public:
 	void clearCells();
 	void draw();
 	const Uint32 *getPixels() const;
+	SDL_Surface *getSurf() const;
 protected:
 	int width;
 	int height;

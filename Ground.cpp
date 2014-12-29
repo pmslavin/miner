@@ -111,3 +111,9 @@ const Uint32 *Ground::getPixels() const
 {
 	return pixels;
 }
+
+
+SDL_Surface *Ground::getSurf() const
+{
+	return surf;
+}

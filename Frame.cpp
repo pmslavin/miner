@@ -51,11 +51,19 @@ void Frame::draw()
 {
 // Surface is immobile at present...
 //	surface->draw();
+//	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
 	ground->draw();
 
-//	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
+/*	Texture-based route...
+	SDL_Texture *grText = SDL_CreateTextureFromSurface(renderer, ground->getSurf());
+	SDL_Rect grRect = {0, surface->getHeight(), ground->getWidth(), ground->getHeight()};
+	SDL_Rect suRect = {0, 0, surface->getWidth(), surface->getHeight()};
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, &suRect, &suRect);
+	SDL_RenderCopy(renderer, grText, NULL, &grRect);
+	SDL_DestroyTexture(grText);
+*/
 	SDL_UpdateTexture(texture, &lower, ground->getPixels(), width*sizeof(Uint32));
-
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
