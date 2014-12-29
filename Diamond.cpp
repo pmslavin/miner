@@ -3,7 +3,7 @@
 #include <iostream>
 
 const std::string Diamond::name = "Diamond";
-const std::string Diamond::symbol = "Di";
+const std::string Diamond::symbol = "C";
 
 Diamond::Diamond(int yield) : Mineral(yield)
 {

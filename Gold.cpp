@@ -4,7 +4,7 @@
 #include <iostream>
 
 const std::string Gold::name = "Gold";
-const std::string Gold::symbol = "Fe";
+const std::string Gold::symbol = "Au";
 
 Gold::Gold(int yield) : Mineral(yield)
 {
@@ -14,7 +14,7 @@ Gold::Gold(int yield) : Mineral(yield)
 
 Gold::~Gold()
 {
-//	std::cout << "Destructing " << name << " then... ";
+
 }
 
 

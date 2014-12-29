@@ -3,10 +3,11 @@
 
 #include "Ground.h"
 #include "Surface.h"
-#include "RoboMiner.h"
 #include "SDL2/SDL.h"
 
 class Cell;
+class RoboMiner;
+
 
 class Frame
 {
@@ -16,15 +17,17 @@ public:
 	Surface *getSurface() const;
 	Ground *getGround() const;
 	RoboMiner *getMiner() const;
-	void draw(SDL_Texture *texture);
+	void draw();
 protected:
 	int width;
 	int height;
-	SDL_Rect upper;
-	SDL_Rect lower;
 	Ground *ground;
 	Surface *surface;
 	RoboMiner *miner;
+	SDL_Rect upper, lower;
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+	SDL_Texture *texture;
 };
 
 #endif

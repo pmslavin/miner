@@ -14,7 +14,7 @@ Uranium::Uranium(int yield) : Mineral(yield)
 
 Uranium::~Uranium()
 {
-//	std::cout << "Destructing " << name << " then... ";
+
 }
 
 
