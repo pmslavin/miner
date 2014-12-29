@@ -67,4 +67,26 @@ Cell *Mineral::getParent() const
 {
 	return parent;
 }
+/*
+template<typename T>
+T *Mineral::extract(int quant)
+{
+	if(quant > yield)
+		quant = yield;
 
+	yield -= quant;
+
+	return new T(quant);
+}
+
+
+auto Mineral::extract(int quant) -> decltype(this)
+{
+	if(quant > yield)
+		quant = yield;
+
+	yield -= quant;
+
+	typedef decltype(this) this_t;
+	return new this_t(quant);
+}*/

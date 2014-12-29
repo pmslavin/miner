@@ -15,8 +15,7 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  energy(1000),
 						  max_cargo(1000),
 						  exploring(false),
-						  drillCount(0),
-						  state(IDLE)
+						  drillCount(0)
 {
 	Cell *startCell = &(frame->getGround()->getCell(cy, cx));
 	setCell(startCell);
@@ -119,7 +118,6 @@ void RoboMiner::move(int cy, int cx)
 int RoboMiner::drill(int cy, int cx)
 {
 	if(!drillCount){
-		state = DRILLING;
 		drillCell = &(frame->getGround()->getCell(cy, cx));
 		drillCell->setDrilling(true);
 		drillCount = 5;
@@ -135,7 +133,6 @@ int RoboMiner::drill(int cy, int cx)
 		std::cout << std::endl;
 		drillCell->setDrilled(true);
 		drillCell = nullptr;
-		state = IDLE;
 	}
 
 	return drillCount;
@@ -148,7 +145,7 @@ void RoboMiner::action()
 //	if(rand() % 512 < 48)
 //		scan();
 
-	if(state == DRILLING){
+	if(drillCell){
 		drill(drillCell->getY(), drillCell->getX());
 		return;
 	}

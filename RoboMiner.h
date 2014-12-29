@@ -8,11 +8,6 @@ class Frame;
 class Mineral;
 class Base;
 
-typedef enum{	DRILLING,
-		MINING,
-		EXPLORING,
-		IDLE
-}state_t;
 
 class RoboMiner
 {
@@ -43,7 +38,6 @@ protected:
 	int max_cargo;
 	bool exploring;
 	int drillCount;
-	state_t state;
 	void emptyCargo();
 	void setLastMinedOre(int cy, int cx);
 	void mine();

@@ -14,7 +14,7 @@ Iron::Iron(int yield) : Mineral(yield)
 
 Iron::~Iron()
 {
-//	std::cout << "Destructing " << name << " then... ";
+
 }
 
 
@@ -35,9 +35,6 @@ void Iron::draw(Uint32 *pixels, int fog)
 	int cell_w = parent->getWidth();
 	int cell_h = parent->getHeight();
 	int w = parent->getGround()->getWidth();
-
-//	pixels[0] += (0x00 << 24) + (yield << 16);
-//	Iron ore 0x00E04714
 
 	const unsigned char most = (Colours::Iron>>16 & 0xFF) * yield/180.0/fog;
 	const unsigned char mid = (Colours::Iron>>8 & 0xFF) * yield/180.0/fog;
@@ -78,21 +75,10 @@ void Iron::draw(Uint32 *pixels, int fog)
 
 Iron *Iron::extract(int quant)
 {
-//	int orig_quant = quant;
-
 	if(quant > yield)
 		quant = yield;
 
 	yield -= quant;
 
-/* 	if(quant == 0){
-		std::cerr << yield << std::endl;
-		std::cerr << orig_quant << std::endl;
-	}
-Gives...
-0
-5
-...on 0-yield mineral.
-*/
 	return new Iron(quant);
 }
