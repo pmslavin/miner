@@ -227,8 +227,9 @@ void RoboMiner::process(std::vector<Mineral *>& ores)
 		if(!present)
 			cargo.push_back(&(*m));
 		else{
-			inCargo->setYield(inCargo->getYield() + m->getYield());
-			m->setYield(0);
+//			inCargo->setYield(inCargo->getYield() + m->getYield());
+//			m->setYield(0);
+			*inCargo += *m;
 		}
 		present = false;
 	}

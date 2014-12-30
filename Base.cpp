@@ -38,8 +38,9 @@ void Base::deposit(std::vector<Mineral *>& cargo)
 			store.push_back(*it);
 			cargo.erase(it);
 		}else{
-			inStore->setYield(inStore->getYield() + (*it)->getYield());
-			(*it)->setYield(0);
+//			inStore->setYield(inStore->getYield() + (*it)->getYield());
+//			(*it)->setYield(0);
+			*inStore += *(*it);
 			it++;
 			present = false;
 			inStore = nullptr;

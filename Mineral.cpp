@@ -1,6 +1,8 @@
 #include "Mineral.h"
-
 #include <iostream>
+#include <typeinfo>
+#include <sstream>
+#include <stdexcept>
 
 const std::string Mineral::name = "Mineral";
 const std::string Mineral::symbol = "XX";
@@ -44,7 +46,7 @@ void Mineral::setYield(int y)
 
 Mineral::~Mineral()
 {
-//	std::cout << "Destructing " << name << std::endl;
+
 }
 
 std::ostream& operator<<(std::ostream& ostr, Mineral& m)
@@ -67,6 +69,23 @@ Cell *Mineral::getParent() const
 {
 	return parent;
 }
+
+
+Mineral& Mineral::operator+=(Mineral& rhs)
+{
+	if(typeid(*this) != typeid(rhs)){
+		std::ostringstream ess;
+		ess << "+= of " << getName() << " and "
+		    << rhs.getName() << std::endl;
+		throw std::invalid_argument(ess.str());
+	}
+
+	yield += rhs.yield;
+	rhs.yield = 0;
+	return *this;
+}
+
+
 /*
 template<typename T>
 T *Mineral::extract(int quant)

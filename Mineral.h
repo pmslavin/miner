@@ -18,6 +18,7 @@ public:
 	virtual int getYield() const;
 	void setYield(int y);
 	friend std::ostream& operator<<(std::ostream& ostr, Mineral& m);
+	Mineral& operator+=(Mineral& rhs);
 	void setParent(Cell *parent);
 	Cell *getParent() const;
 	virtual void draw(Uint32 *pixels, int fog) = 0;
