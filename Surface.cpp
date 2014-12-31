@@ -1,4 +1,5 @@
 #include "Surface.h"
+#include "Frame.h"
 #include "Base.h"
 #include "constants.h"
 #include "resources.h"

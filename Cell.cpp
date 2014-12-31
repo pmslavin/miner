@@ -4,7 +4,6 @@
 #include "RoboMiner.h"
 #include "constants.h"
 #include <iostream>
-#include <algorithm>
 
 
 Cell::Cell(int w, int h, int x, int y, Ground *g) : width(w),

@@ -1,7 +1,7 @@
 CXX	:= g++
 CXXFLAGS:= -std=c++11 -g -O3
 WARN	:= -Wall -Wextra
-OBJECTS	:= resources.o Cell.o Mineral.o Iron.o Copper.o Gold.o Diamond.o Uranium.o Ground.o Surface.o Frame.o RoboMiner.o Base.o
+OBJECTS	:= resources.o Cell.o Mineral.o MineralStore.o Iron.o Copper.o Gold.o Diamond.o Uranium.o Ground.o Surface.o Frame.o RoboMiner.o Base.o
 LIBS	:= -lSDL2
 
 all: main
@@ -17,6 +17,9 @@ Cell.o: Cell.cpp Cell.h
 
 Mineral.o: Mineral.cpp Mineral.h
 	${CXX} ${CXXFLAGS} ${WARN} -c Mineral.cpp
+
+MineralStore.o: MineralStore.cpp MineralStore.h
+	${CXX} ${CXXFLAGS} ${WARN} -c MineralStore.cpp
 
 Iron.o: Iron.cpp Iron.h Mineral.h
 	${CXX} ${CXXFLAGS} ${WARN} -c Iron.cpp

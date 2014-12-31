@@ -10,3 +10,5 @@
 [10] Text info Panel.
 [11] Fog for invisible cells - user visible but faded.						DONE
 [12] Mouseover cells.
+[13] Energy.
+[14] Save state.

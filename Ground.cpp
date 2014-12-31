@@ -8,23 +8,25 @@
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 #include "SDL2/SDL.h"
 
 
 Ground::Ground(int w, int h, Frame *fr) : width(w), height(h), frame(fr)
 {
-	cell_rows = height/4;
-	cell_cols = width/4;
+	cell_rows = height/CELL_SZ;
+	cell_cols = width/CELL_SZ;
 
+	cells.reserve(cell_rows*cell_cols);
 	for(int i=0; i<cell_rows*cell_cols; ++i){
-		cells.push_back(Cell(4, 4, i%cell_cols, i/cell_cols, this));
+		cells.push_back(Cell(CELL_SZ, CELL_SZ, i%cell_cols, i/cell_cols, this));
 	}
 
 	surf = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 	pixels = static_cast<Uint32 *>(surf->pixels);
 //	pixels = new Uint32[width*height];
-	memset(pixels, 0, width*height*sizeof(Uint32));
+	std::memset(pixels, 0, width*height*sizeof(Uint32));
 	calcMinerals();
 }
 

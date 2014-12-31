@@ -10,10 +10,12 @@ class Ground;
 class Mineral;
 class RoboMiner;
 
+const int CELL_SZ = 4;
+
 class Cell
 {
 public:
-	Cell(int w=1, int h=1, int x=0, int y=0, Ground *g=nullptr);
+	Cell(int w=CELL_SZ, int h=CELL_SZ, int x=0, int y=0, Ground *g=nullptr);
 	~Cell();
 	int getWidth() const;
 	int getHeight() const;

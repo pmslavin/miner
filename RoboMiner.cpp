@@ -121,16 +121,16 @@ int RoboMiner::drill(int cy, int cx)
 		drillCell = &(frame->getGround()->getCell(cy, cx));
 		drillCell->setDrilling(true);
 		drillCount = 5;
-		std::cout << "Drilling (" << cy << "," << cx << ") "
-			  << std::flush;
+//		std::cout << "Drilling (" << cy << "," << cx << ") "
+//			  << std::flush;
 		return drillCount;
 	}else{
-		std::cout << drillCount << "... " << std::flush;
+//		std::cout << drillCount << "... " << std::flush;
 		--drillCount;
 	}
 
 	if(!drillCount){
-		std::cout << std::endl;
+//		std::cout << std::endl;
 		drillCell->setDrilled(true);
 		drillCell = nullptr;
 	}
@@ -255,7 +255,7 @@ void RoboMiner::process(std::vector<Mineral *>& ores)
 		std::cout << "Cargo Full: Returning to base..." << std::endl;
 		listCargo();
 		setLastMinedOre(cell_y, cell_x);
-		setDestination(0, 128);
+		setDestination(base->getY(), base->getX());
 	}
 }
 
