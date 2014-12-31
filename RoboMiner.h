@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Cell.h"
+#include "MineralStore.h"
 
 class Frame;
 class Mineral;
@@ -33,7 +34,7 @@ protected:
 	Frame *frame;
 	Base *base;
 	Cell *cell, *destCell, *lastMinedOre, *drillCell;
-	std::vector<Mineral *> cargo;
+	MineralStore cargo;
 	int energy;
 	int max_cargo;
 	bool exploring;
@@ -41,7 +42,7 @@ protected:
 	void emptyCargo();
 	void setLastMinedOre(int cy, int cx);
 	void mine();
-	void process(std::vector<Mineral *>& ores);
+	void process(MineralStore& ores);
 	void setDestination(int cy, int cx);
 	void navigate();
 };

@@ -12,7 +12,7 @@ MineralStore::MineralStore(int szhint)
 
 MineralStore::~MineralStore()
 {
-
+	emptyStore();
 }
 
 
@@ -28,6 +28,21 @@ void MineralStore::emptyStore()
 		delete m;
 	
 	store.clear();
+}
+
+
+void MineralStore::emptyNulls()
+{
+	Mineral * m;
+	for(auto it = store.begin(); it != store.end(); ){
+		m = *it;
+		if(!m->getYield()){
+			delete m;
+			store.erase(it);
+		}else{
+			++it;
+		}
+	}
 }
 
 
@@ -53,9 +68,10 @@ MineralStore& MineralStore::operator+=(Mineral& rhs)
 
 MineralStore& MineralStore::operator+=(MineralStore& rhs)
 {
-	Mineral *inStore = nullptr;
+	Mineral *inStore = nullptr, *r;
 
-	for(auto& r: rhs.store){
+	for(auto it = rhs.store.begin(); it != rhs.store.end(); ){
+		r = *it;
 		for(auto& m: store){
 			if(typeid(*m) == typeid(*r)){
 				inStore = m;
@@ -65,20 +81,38 @@ MineralStore& MineralStore::operator+=(MineralStore& rhs)
 
 		if(!inStore){
 			store.push_back(&(*r));
-		}
-		inStore = nullptr;
-	}
-
-	Mineral *rmin;
-	for(auto it = rhs.store.begin(); it != rhs.store.end(); ){
-		rmin = *it;
-		if(rmin->getYield() == 0){
-			delete rmin;
 			rhs.store.erase(it);
 		}else{
 			++it;
+			inStore = nullptr;
 		}
 	}
 
+	rhs.emptyNulls();
 	return *this;
+}
+
+
+int MineralStore::size() const
+{
+	int total = 0;
+
+	for(auto& m: store)
+		total += m->getYield();
+
+	return total;
+}
+
+
+std::ostream& operator<<(std::ostream& ostr, const MineralStore& mstore)
+{
+	int idx = 1;
+	for(const auto& m: mstore.store){
+		ostr << "\t[" << idx++ << "]  "
+			  << m->getName() << " : "
+			  << m->getYield() << " units"
+			  << std::endl;
+	}
+
+	return ostr;
 }

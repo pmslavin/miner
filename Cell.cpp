@@ -3,6 +3,7 @@
 #include "Ground.h"
 #include "RoboMiner.h"
 #include "constants.h"
+#include "MineralStore.h"
 #include <iostream>
 
 
@@ -238,12 +239,12 @@ bool Cell::isDrilled() const
 }
 
 
-std::vector<Mineral *> *Cell::extract(int quant)
+MineralStore *Cell::extract(int quant)
 {
-	std::vector<Mineral *> *ores = new std::vector<Mineral *>;
+	MineralStore *ores = new MineralStore();
 
 	for(auto& m: minerals){
-		ores->push_back(m->extract(quant));
+		*ores += *(m->extract(quant));
 	}
 
 	Mineral *m;
@@ -258,7 +259,6 @@ std::vector<Mineral *> *Cell::extract(int quant)
 			it++;
 		}
 	}
-//	minerals.erase(std::remove_if(std::begin(minerals), std::end(minerals), isEmpty), std::end(minerals)); 
 	return ores;
 }
 

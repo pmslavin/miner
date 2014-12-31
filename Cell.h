@@ -9,6 +9,7 @@
 class Ground;
 class Mineral;
 class RoboMiner;
+class MineralStore;
 
 const int CELL_SZ = 4;
 
@@ -35,7 +36,7 @@ public:
 	void setDrilled(bool isdrilled);
 	void setDrilling(bool isdrilling);
 	bool isDrilled() const;
-	std::vector<Mineral *> *extract(int quant);
+	MineralStore *extract(int quant);
 	int distanceFrom(const Cell& c) const;
 protected:
 	int width;

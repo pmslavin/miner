@@ -1,6 +1,7 @@
 #include "Frame.h"
 #include "RoboMiner.h"
 #include "Mineral.h"
+#include "MineralStore.h"
 #include "Base.h"
 
 #include <iostream>
@@ -21,7 +22,6 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 	setCell(startCell);
 	startCell->setDrilled(true);
 	startCell->hasMiner(this);
-//	setCell(frame->getGround()->getCell(cy, cx));
 //	setDestination(160, 128);
 	setBase(frame->getSurface()->getBase()); 
 }
@@ -192,65 +192,24 @@ void RoboMiner::mine()
 	if(remain < extract_quant)
 		extract_quant = remain;
 
-	std::vector<Mineral *> *output = cell->extract(extract_quant);
+	MineralStore *output = cell->extract(extract_quant);
 
-	std::cout << "Mining (" << cell_y << "," << cell_x
-		  << ") yields:" << std::endl;
+//	std::cout << "Mining (" << cell_y << "," << cell_x
+//		  << ") yields:" << std::endl;
 
-	int idx = 1;
-	for(auto& m: *output){
-		std::cout << '\t' << "[" << idx++ << "] "
-			  << m->getYield() << " units of "
-			  << m->getName() << std::endl;
-	}
-
+//	std::cout << *output;
 	process(*output);
 	delete output;
 }
 
 
-void RoboMiner::process(std::vector<Mineral *>& ores)
+void RoboMiner::process(MineralStore& ores)
 {
 	if(isFull())
 		return;
 
-	bool present = false;
-	Mineral *inCargo = nullptr;
+	cargo += ores;
 
-	for(auto& m: ores){
-		for(auto& c: cargo){
-			if(c->getName() == m->getName()){
-				present = true;
-				inCargo = c;
-			}
-		}
-		if(!present)
-			cargo.push_back(&(*m));
-		else{
-//			inCargo->setYield(inCargo->getYield() + m->getYield());
-//			m->setYield(0);
-			*inCargo += *m;
-		}
-		present = false;
-	}
-/* Minerals not deleted here are now owned by the RM.
- * Erase their iter from the vector, but don't
- * destruct the Mineral itself.
- */
-	Mineral *m;
-	for(auto it = ores.begin(); it != ores.end(); ){
-		m = *it;
-		if(!m->getYield()){
-//			std::cout << "Erasing from ores: " << m->getName() << std::endl;
-			delete m;
-			ores.erase(it);
-		}else{
-			it++;
-		}
-	}
-
-//	std::cout << "ores emptied: " << ores->size() << std::endl;
-//	listCargo();
 	if(isFull()){
 		std::cout << "Cargo Full: Returning to base..." << std::endl;
 		listCargo();
@@ -351,7 +310,6 @@ done:
 			base->deposit(cargo);
 			emptyCargo();
 		}
-//		emptyCargo();
 		if(lastMinedOre){
 			setDestination(lastMinedOre->getY(), lastMinedOre->getX());
 			lastMinedOre = nullptr;
@@ -368,10 +326,7 @@ bool RoboMiner::isFull() const
 
 int RoboMiner::getRemainingSpace() const
 {
-	int onboard = 0;
-
-	for(auto& m: cargo)
-		onboard += m->getYield();
+	int onboard = cargo.size();
 
 	if(onboard > max_cargo)
 		onboard = max_cargo;
@@ -382,13 +337,7 @@ int RoboMiner::getRemainingSpace() const
 
 void RoboMiner::emptyCargo()
 {
-	Mineral *m = nullptr;
-	for(auto it = cargo.begin(); it != cargo.end(); ){
-		m = *it;
-		delete m;
-		cargo.erase(it);
-	}
-
+	cargo.emptyStore();	
 }
 
 
@@ -406,14 +355,7 @@ bool RoboMiner::atBase() const
 
 void RoboMiner::listCargo() const
 {
-	std::cout << "[Cargo]" << std::endl;
-	int idx = 1;
-	for(auto& c: cargo){
-		std::cout << '\t' << "[" << idx++ << "] "
-			  << c->getName() << " : " << c->getYield()
-			  << " units" << std::endl;
-	}
-
+	std::cout << cargo;
 }
 
 

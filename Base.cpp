@@ -22,43 +22,17 @@ Base::~Base()
 }
 
 
-void Base::deposit(std::vector<Mineral *>& cargo)
+void Base::deposit(MineralStore& cargo)
 {
-	bool present = false;
-	Mineral *inStore = nullptr;
-
-	for(auto it = cargo.begin() ; it != cargo.end() ; ){
-		for(auto& m: store){
-			if(m->getName() == (*it)->getName()){
-				present = true;
-				inStore = m;
-			}
-		}
-		if(!present){
-			store.push_back(*it);
-			cargo.erase(it);
-		}else{
-//			inStore->setYield(inStore->getYield() + (*it)->getYield());
-//			(*it)->setYield(0);
-			*inStore += *(*it);
-			it++;
-			present = false;
-			inStore = nullptr;
-		}
-	}
+	store += cargo;
+	std::cout << "Base contains:" << std::endl;
 	listStore();
 }
 
 
 void Base::listStore() const
 {
-	int idx=1;
-	std::cout << "Base store contains:" << std::endl;
-	for(auto& m: store){
-		std::cout << "\t[" << idx++ << "]  "
-			  << m->getYield() << " units "
-			  << m->getName() << std::endl;
-	}
+	std::cout << store;
 }
 
 
