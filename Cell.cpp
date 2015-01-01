@@ -3,7 +3,6 @@
 #include "Ground.h"
 #include "RoboMiner.h"
 #include "constants.h"
-#include "MineralStore.h"
 #include <iostream>
 
 
@@ -65,33 +64,28 @@ Ground *Cell::getGround() const
 void Cell::addMineral(Mineral *m)
 {
 	m->setParent(this);
-	minerals.push_back(m);
+	minerals += *m;
 }
 
 
 void Cell::clearMinerals()
 {
-	for(auto& m: minerals){
-		m->setParent(nullptr);
-		delete m;
-	}
-
-	minerals.clear();
+	minerals.emptyStore();
 }
 
 
 int Cell::mineralCount() const
 {
-	return minerals.size();
+	return minerals.mineralCount();
 }
 
 std::ostream& operator<<(std::ostream& ostr, Cell& c)
 {
 	ostr << "Cell at (" << c.y << "," << c.x << "):" << std::endl;
 
-	unsigned int idx;
+	int idx;
 
-	for(idx=0; idx<c.minerals.size(); ++idx)
+	for(idx=0; idx<c.minerals.mineralCount(); ++idx)
 		ostr << "[" << idx+1 << "] " << *c.minerals[idx];
 
 	return ostr;
@@ -105,7 +99,7 @@ void Cell::drawMinerals(Uint32 *pixels)
 	if(!isVisible())
 		fog = 4;
 	
-	if(!minerals.empty())
+	if(!minerals.isEmpty())
 		drawBlank(pixels);
 	else if(drilling)
 		drawDrillProgress(pixels);
@@ -247,18 +241,8 @@ MineralStore *Cell::extract(int quant)
 		*ores += *(m->extract(quant));
 	}
 
-	Mineral *m;
-	for(auto it = minerals.begin(); it != minerals.end(); ){
-		m = *it;
-		if(!m->getYield()){
-//			std::cout << "Erasing " << m->getName() << "("
-//				  << y << "," << x << ")" << std::endl;
-			delete m;
-			minerals.erase(it);
-		}else{
-			it++;
-		}
-	}
+	minerals.emptyNulls();
+
 	return ores;
 }
 

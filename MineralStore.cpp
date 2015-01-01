@@ -12,7 +12,8 @@ MineralStore::MineralStore(int szhint)
 
 MineralStore::~MineralStore()
 {
-	emptyStore();
+	if(store.size() != 0)
+		emptyStore();
 }
 
 
@@ -74,12 +75,14 @@ MineralStore& MineralStore::operator+=(MineralStore& rhs)
 		r = *it;
 		for(auto& m: store){
 			if(typeid(*m) == typeid(*r)){
+			/* Increment yield of existing type */
 				inStore = m;
 				*m += *r;
 			}
 		}
 
 		if(!inStore){
+		/* Transfer ownership to this */
 			store.push_back(&(*r));
 			rhs.store.erase(it);
 		}else{
@@ -87,8 +90,8 @@ MineralStore& MineralStore::operator+=(MineralStore& rhs)
 			inStore = nullptr;
 		}
 	}
-
-	rhs.emptyNulls();
+/* rhs will now contain only 0-yield entries so... */
+	rhs.emptyStore();
 	return *this;
 }
 
@@ -115,4 +118,28 @@ std::ostream& operator<<(std::ostream& ostr, const MineralStore& mstore)
 	}
 
 	return ostr;
+}
+
+
+std::vector<Mineral *>::iterator MineralStore::begin()
+{
+	return store.begin();
+}
+
+
+std::vector<Mineral *>::iterator MineralStore::end()
+{
+	return store.end();
+}
+
+
+Mineral *MineralStore::operator[](int idx)
+{
+	return store[idx];
+}
+
+
+bool MineralStore::isEmpty() const
+{
+	return store.empty();
 }

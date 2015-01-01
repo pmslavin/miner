@@ -71,6 +71,13 @@ Cell *Mineral::getParent() const
 }
 
 
+/* N.B. This kills the argument.
+ * Conservation of total yield for
+ * each mineral-type requires that this is a
+ * destructive operation for the rhs.
+ * Only semantically valid for like subtypes,
+ * as enforced by typeid.
+ */
 Mineral& Mineral::operator+=(Mineral& rhs)
 {
 	if(typeid(*this) != typeid(rhs)){

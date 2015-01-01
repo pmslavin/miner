@@ -3,13 +3,12 @@
 
 #include <vector>
 #include <string>
-
 #include "SDL2/SDL.h"
+#include "MineralStore.h"
 
 class Ground;
 class Mineral;
 class RoboMiner;
-class MineralStore;
 
 const int CELL_SZ = 4;
 
@@ -44,7 +43,8 @@ protected:
 	int x;
 	int y;
 	Ground *ground;
-	std::vector<Mineral *> minerals;
+//	std::vector<Mineral *> minerals;
+	MineralStore minerals;
 	RoboMiner *miner;
 	bool visible, drilling, drilled;
 	void drawDrilled(Uint32 *pixels);

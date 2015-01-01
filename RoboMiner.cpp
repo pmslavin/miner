@@ -308,7 +308,6 @@ done:
 		destCell = nullptr;
 		if(atBase()){
 			base->deposit(cargo);
-			emptyCargo();
 		}
 		if(lastMinedOre){
 			setDestination(lastMinedOre->getY(), lastMinedOre->getX());
