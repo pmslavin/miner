@@ -1,4 +1,4 @@
-[1]  MineralStore class for rm.cargo, ores, base.store: Replaces std::vector<Mineral *>.
+[1]  MineralStore class for rm.cargo, ores, base.store: Replaces std::vector<Mineral *>.	DONE
 [2]  Colours namespace.										DONE
 [3]  Scan locale, move directly to radius if no minerals.					DONE
 [4]  Make Drill(rate), Scan(radius), EnergyPack(capacity), components of rm.

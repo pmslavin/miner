@@ -8,6 +8,7 @@ typedef uint32_t Uint32;
 
 class Frame;
 class Base;
+class RoboMiner;
 
 class Surface{
 public:
@@ -18,6 +19,7 @@ public:
 	Base *getBase() const;
 	int getWidth() const;
 	int getHeight() const;
+	void ascend(const RoboMiner& rm) const;
 protected:
 	int width;
 	int height;

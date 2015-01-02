@@ -13,10 +13,12 @@ RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
 						  destCell(nullptr),
 						  lastMinedOre(nullptr),
 						  drillCell(nullptr),
-						  energy(1000),
+						  energy(2000),
 						  max_cargo(1000),
 						  exploring(false),
-						  drillCount(0)
+						  ascending(false),
+						  drillCount(0),
+						  ascendCount(0)
 {
 	Cell *startCell = &(frame->getGround()->getCell(cy, cx));
 	setCell(startCell);
@@ -32,7 +34,7 @@ RoboMiner::~RoboMiner()
 }
 
 
-void RoboMiner::draw(uint32_t *pixels)
+void RoboMiner::draw(uint32_t *pixels) const
 {
 /*
  *	0101
@@ -111,6 +113,7 @@ void RoboMiner::move(int cy, int cx)
 		cell->hasMiner(this);
 		cell_y = cy;
 		cell_x = cx;
+		energy -= 1;
 	}
 }
 
@@ -145,18 +148,29 @@ void RoboMiner::action()
 //	if(rand() % 512 < 48)
 //		scan();
 
+	std::cout << "E: " << energy << std::endl;
+
+	if(ascending){
+		ascend();
+		return;
+	}
+
 	if(drillCell){
+		--energy;
 		drill(drillCell->getY(), drillCell->getX());
 		return;
 	}
 
 	if(cell->mineralCount() > 0 && !isFull()){
+		--energy;
 		mine();
 		return;
 	}
 
-	if(!destCell || exploring)
+	if(!destCell || exploring){
+		energy -= 2;
 		scan();
+	}
 
 	if(destCell){
 		navigate();
@@ -211,7 +225,9 @@ void RoboMiner::process(MineralStore& ores)
 	cargo += ores;
 
 	if(isFull()){
-		std::cout << "Cargo Full: Returning to base..." << std::endl;
+		std::cout << "Cargo Full: Returning to base ("
+			  << base->getY() << "," << base->getX()
+			  << ")..." << std::endl;
 		listCargo();
 		setLastMinedOre(cell_y, cell_x);
 		setDestination(base->getY(), base->getX());
@@ -307,7 +323,7 @@ done:
 	if(dest_y == cell_y && dest_x == cell_x){
 		destCell = nullptr;
 		if(atBase()){
-			base->deposit(cargo);
+			ascending = true;
 		}
 		if(lastMinedOre){
 			setDestination(lastMinedOre->getY(), lastMinedOre->getX());
@@ -364,7 +380,6 @@ void RoboMiner::scan()
 	int up_radius = radius, down_radius = radius;
 	int left_radius = radius, right_radius = radius;
 	int xdist, ydist;
-
 
 	Ground *g = frame->getGround();
 	
@@ -431,4 +446,26 @@ void RoboMiner::scan()
 
 	
 
+}
+
+
+int RoboMiner::ascend()
+{
+	if(!ascendCount){
+		ascendCount = 5;
+		cell->clearMiner();
+		base->ascend(*this);
+		base->deposit(cargo);
+		energy = 2000;
+	}else{
+		--ascendCount;
+	}
+
+	if(!ascendCount){
+		ascending = false;
+		base->descend();
+		cell->hasMiner(this);
+	}
+
+	return ascendCount;
 }

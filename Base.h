@@ -7,6 +7,7 @@
 
 class Mineral;
 class Surface;
+class RoboMiner;
 struct SDL_Surface;
 
 class Base
@@ -22,6 +23,8 @@ public:
 	virtual void draw(SDL_Surface *destsurf);
 	int getWidth() const;
 	int getHeight() const;
+	void ascend(const RoboMiner& rm) const;
+	void descend();
 protected:
 	int width, height;
 	int y, x;

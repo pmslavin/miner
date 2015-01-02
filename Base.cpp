@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "Mineral.h"
 #include "Surface.h"
+#include "RoboMiner.h"
 #include "resources.h"
 
 
@@ -79,4 +80,16 @@ void Base::draw(SDL_Surface *destsurf)
 	SDL_Rect dest = {destsurf->w/2-mine->w/2+2, destsurf->h-mine->h-6, mine->w, mine->h};
 	SDL_BlitSurface(mine, nullptr, destsurf, &dest);
 
+}
+
+
+void Base::ascend(const RoboMiner& rm) const
+{
+	surface->ascend(rm);
+}
+
+
+void Base::descend()
+{
+	surface->draw();
 }

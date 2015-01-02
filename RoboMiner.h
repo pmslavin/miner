@@ -15,7 +15,7 @@ class RoboMiner
 public:
 	RoboMiner(int cy, int cx, Frame *fr=nullptr);
 	virtual ~RoboMiner();
-	void draw(uint32_t *pixels);
+	void draw(uint32_t *pixels) const;
 	int getX() const;
 	int getY() const;
 	void setCell(Cell *c);
@@ -28,6 +28,7 @@ public:
 	bool atBase() const;
 	void listCargo() const;
 	void scan();
+	int ascend();
 protected:
 	int cell_y;
 	int cell_x;
@@ -37,8 +38,8 @@ protected:
 	MineralStore cargo;
 	int energy;
 	int max_cargo;
-	bool exploring;
-	int drillCount;
+	bool exploring, ascending;
+	int drillCount, ascendCount;
 	void emptyCargo();
 	void setLastMinedOre(int cy, int cx);
 	void mine();

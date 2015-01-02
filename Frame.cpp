@@ -18,6 +18,8 @@ Frame::Frame(int w, int h) : width(w),
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, w, h+surface_height);
 
+//	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+
 	ground = new Ground(w, h);
 	surface = new Surface(w, surface_height);
 
@@ -51,7 +53,7 @@ void Frame::draw()
 {
 // Surface is immobile at present...
 //	surface->draw();
-//	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
+	SDL_UpdateTexture(texture, &upper, surface->getPixels(), width*sizeof(Uint32));
 	ground->draw();
 
 /*	Texture-based route...
@@ -64,7 +66,7 @@ void Frame::draw()
 	SDL_DestroyTexture(grText);
 */
 	SDL_UpdateTexture(texture, &lower, ground->getPixels(), width*sizeof(Uint32));
-	SDL_RenderClear(renderer);
+//	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 }

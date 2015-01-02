@@ -1,6 +1,8 @@
 #include "Surface.h"
 #include "Frame.h"
 #include "Base.h"
+#include "RoboMiner.h"
+#include "Cell.h"
 #include "constants.h"
 #include "resources.h"
 
@@ -12,7 +14,7 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 					    frame(fr)
 {
 //	pixels = new Uint32[w*h];
-	base = new Base(24, 20, 0, 128, this);
+	base = new Base(24, 20, 0, width/CELL_SZ/2, this);
 	
 /*	trees1 = SDL_LoadBMP("trees1.bmp");
 	trees2 = SDL_LoadBMP("trees2.bmp");
@@ -115,4 +117,11 @@ int Surface::getWidth() const
 int Surface::getHeight() const
 {
 	return height;
+}
+
+
+void Surface::ascend(const RoboMiner& rm) const
+{
+	const int soil_height = 6;
+	rm.draw(&pixels[(height-soil_height)*width+width/2]);
 }
