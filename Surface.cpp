@@ -13,7 +13,6 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 					    height(h),
 					    frame(fr)
 {
-//	pixels = new Uint32[w*h];
 	base = new Base(24, 20, 0, width/CELL_SZ/2, this);
 	
 /*	trees1 = SDL_LoadBMP("trees1.bmp");
@@ -38,7 +37,6 @@ Surface::Surface(int w, int h, Frame *fr) : width(w),
 
 Surface::~Surface()
 {
-//	delete [] pixels;
 	delete base;
 	pixels = nullptr;
 	SDL_FreeSurface(trees1);
@@ -70,15 +68,11 @@ void Surface::draw()
 		for(j=0; j<width; ++j){
 			pixels[i*width+j] = Colours::Surface::Soil;
 		}
-		pixels[i*width+width/2] = Colours::Surface::Shaft;
-		pixels[i*width+width/2+1] = Colours::Surface::Shaft;
-		pixels[i*width+width/2+2] = Colours::Surface::Shaft;
-		pixels[i*width+width/2+3] = Colours::Surface::Shaft;
+		for(int k=0; k<CELL_SZ; ++k){
+			pixels[i*width+width/2+k] = Colours::Surface::Shaft;
+		}
 	}
 
-//	int basetop = height-base->getHeight()-soil_height;
-//	base->draw(&pixels[width*basetop+(width/2-base->getWidth()/2)+2]);
-	
 	base->draw(surf);
 	SDL_Rect tz1 = {width-trees1->w, height-trees1->h-soil_height, trees1->w, trees1->h};
 	SDL_BlitSurface(trees1, nullptr, surf, &tz1);
