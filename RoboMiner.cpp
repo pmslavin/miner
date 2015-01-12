@@ -5,6 +5,8 @@
 #include "Base.h"
 
 #include <iostream>
+#include <algorithm>
+#include <iterator>
 
 
 RoboMiner::RoboMiner(int cy, int cx, Frame *fr) : cell_y(cy),
@@ -409,16 +411,18 @@ void RoboMiner::scan()
 		}
 	}
 
-//	std::cout << "\ty_r: " << y_radius << "  x_r: "
-//		  << x_radius << "  tc: " << scope.size() << std::endl;
-	std::vector<const Cell *> mineralCells;
+/*	std::cout << "\ty_r: " << y_radius << "  x_r: "
+		  << x_radius << "  tc: " << scope.size() << std::endl;
 	for(auto& c: scope){
 		c->setVisible(true);
 		if(c->mineralCount()){
 			mineralCells.push_back(c);
 		}
-		
 	}
+*/
+	std::vector<const Cell *> mineralCells;
+	std::copy_if(scope.cbegin(), scope.cend(), std::back_inserter(mineralCells), \
+			[](Cell *c){ c->setVisible(true); return c->mineralCount(); });
 
 	if(mineralCells.empty() && !destCell){
 		int roll = rand() % 4;
