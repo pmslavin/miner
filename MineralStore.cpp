@@ -2,6 +2,7 @@
 #include "Mineral.h"
 
 #include <typeinfo>
+#include <algorithm>
 
 
 MineralStore::MineralStore(int szhint)
@@ -34,16 +35,15 @@ void MineralStore::emptyStore()
 
 void MineralStore::emptyNulls()
 {
-	Mineral * m;
-	for(auto it = store.begin(); it != store.end(); ){
-		m = *it;
-		if(!m->getYield()){
-			delete m;
-			store.erase(it);
-		}else{
-			++it;
-		}
-	}
+	std::vector<Mineral *>::iterator rst = std::partition(store.begin(),
+							      store.end(),
+							      [](const Mineral *m){return m->getYield()!=0;});
+
+	for(auto it = rst; it != store.end(); it++)
+		delete *it;
+	
+	store.erase(rst, store.end());
+
 }
 
 

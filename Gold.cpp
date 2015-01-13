@@ -60,5 +60,6 @@ Gold *Gold::extract(int quant)
 		quant = yield;
 
 	yield -= quant;
+
 	return new Gold(quant);
 }

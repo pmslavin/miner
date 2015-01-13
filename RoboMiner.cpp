@@ -150,7 +150,7 @@ void RoboMiner::action()
 //	if(rand() % 512 < 48)
 //		scan();
 
-	std::cout << "E: " << energy << std::endl;
+//	std::cout << "E: " << energy << std::endl;
 
 	if(ascending){
 		ascend();
@@ -437,8 +437,8 @@ void RoboMiner::scan()
 			case 3: x_off = -left_radius;
 				break;
 		}
-		std::cout << "Exploring to: (" << cell_y+y_off
-			  << "," << cell_x+x_off << ")" << std::endl;
+//		std::cout << "Exploring to: (" << cell_y+y_off
+//			  << "," << cell_x+x_off << ")" << std::endl;
 		setDestination(cell_y + y_off, cell_x + x_off);
 		exploring = true;
 	}else if(!mineralCells.empty() && !destCell){
